@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package storage.user;
+
+option csharp_namespace = "Storage.User";
+
+message UserDto {
+  uint64 id = 1;
+  optional bytes card_bytes = 2;
+  string name = 3;
+  string email = 4;
+}

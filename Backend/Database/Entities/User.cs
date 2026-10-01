@@ -3,7 +3,7 @@ using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
 
-public class User
+public class User : ISoftDeletable
 {
     public ulong Id { get; set; }
 
@@ -19,6 +19,8 @@ public class User
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
 
     // Navigation properties
 

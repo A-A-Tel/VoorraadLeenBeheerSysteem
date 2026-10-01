@@ -25,6 +25,20 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        #region config
+
+        // Exclude soft deleted entities from queries
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                builder.Entity(entityType.ClrType)
+                    .HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
+            }
+        }
+
+        #endregion
+        
         #region Junction Composite Keys
 
         builder.Entity<LoanProduct>()
@@ -215,6 +229,13 @@ public class AppDbContext : DbContext
 
         options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
     }
+    
+    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+        {
+            builder
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
+        }
 
     private static string GetEnv(string key)
     {
@@ -227,11 +248,15 @@ public class AppDbContext : DbContext
         string parsable = GetEnv(key);
         return uint.Parse(parsable);
     }
-
-    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+    
+    private static System.Linq.Expressions.LambdaExpression ConvertFilterExpression(Type type)
     {
-        builder
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
+        var parameter = System.Linq.Expressions.Expression.Parameter(type, "e");
+        var property = System.Linq.Expressions.Expression.Property(parameter, nameof(ISoftDeletable.DeletedAt));
+        var nullConstant = System.Linq.Expressions.Expression.Constant(null, typeof(DateTime?));
+        var comparison = System.Linq.Expressions.Expression.Equal(property, nullConstant);
+        
+        return System.Linq.Expressions.Expression.Lambda(comparison, parameter);
     }
+
 }

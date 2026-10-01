@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Audit.EntityFramework" />
         <PackageReference Include="Google.Protobuf"/>
         <PackageReference Include="Grpc.AspNetCore"/>
         <PackageReference Include="Grpc.Core"/>

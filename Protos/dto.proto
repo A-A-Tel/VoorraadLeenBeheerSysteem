@@ -34,5 +34,3 @@ message Note {
   uint64 id = 1;
   
 }
-
-
