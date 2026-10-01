@@ -1,7 +1,9 @@
+using System.Text.Json;
 using Backend.Database.Entities;
 using Backend.Database.Entities.Junctions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MySqlConnector;
 
 namespace Backend.Database;
@@ -9,6 +11,7 @@ namespace Backend.Database;
 public class AppDbContext : DbContext
 {
     protected virtual string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP(6)";
+    protected virtual string AuditLogDataColumnType => "JSON";
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -22,10 +25,12 @@ public class AppDbContext : DbContext
     public DbSet<ProductRole> ProductRoles { get; set; }
     public DbSet<UserNote> UserNotes { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    
+    public DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        #region config
+        #region Config
 
         // Exclude soft deleted entities from queries
         foreach (var entityType in builder.Model.GetEntityTypes())
@@ -36,6 +41,18 @@ public class AppDbContext : DbContext
                     .HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
             }
         }
+        
+        // Set AuditLog.AuditData to appropriate column type
+        ValueConverter<JsonDocument, string> jsonDocumentConverter = 
+            new(
+                document => document.RootElement.GetRawText(), 
+                json => JsonDocument.Parse(json)
+            );
+        
+        builder.Entity<AuditLog>()
+            .Property(al => al.AuditData)
+            .HasColumnType(AuditLogDataColumnType)
+            .HasConversion(jsonDocumentConverter);
 
         #endregion
         
@@ -208,11 +225,6 @@ public class AppDbContext : DbContext
 
         #endregion
 
-        builder.Entity<User>()
-            .Property(x => x.IsActive)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValue(true);
-
         #endregion
     }
 
@@ -236,7 +248,7 @@ public class AppDbContext : DbContext
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
         }
-
+    
     private static string GetEnv(string key)
     {
         return Environment.GetEnvironmentVariable(key) ??

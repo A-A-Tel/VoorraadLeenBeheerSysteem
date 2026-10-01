@@ -15,8 +15,6 @@ public class User : ISoftDeletable
 
     [MinLength(1)] [MaxLength(255)] public string? PasswordHash { get; set; }
 
-    [Required] public bool IsActive { get; set; } = true;
-
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
