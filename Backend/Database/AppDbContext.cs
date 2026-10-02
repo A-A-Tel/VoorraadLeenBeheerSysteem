@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<Note> Notes { get; set; }
     public DbSet<Log> Logs { get; set; }
     public DbSet<Loan> Loans { get; set; }
+    public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
     public DbSet<LoanProduct> LoanProducts { get; set; }
     public DbSet<ProductNote> ProductNotes { get; set; }
@@ -141,6 +142,12 @@ public class AppDbContext : DbContext
             .HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
             .HasForeignKey(y => y.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserRefreshToken>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         #endregion

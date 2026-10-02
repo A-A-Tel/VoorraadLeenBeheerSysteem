@@ -1,8 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities;
 
+[Index(nameof(Email), IsUnique = true)]
+[Index(nameof(Number), IsUnique = true)]
 public class User : ISoftDeletable
 {
     public ulong Id { get; set; }
@@ -31,4 +34,5 @@ public class User : ISoftDeletable
     public ICollection<Loan> BorrowedLoans { get; set; } = [];
     public ICollection<UserRole> UserRoles { get; set; } = [];
     public ICollection<UserNote> UserNotes { get; set; } = [];
+    public ICollection<UserRefreshToken> RefreshTokens { get; set; } = [];
 }
