@@ -3,6 +3,7 @@ package storage.user;
 option csharp_namespace = "Protos.User";
 
 import "role.proto";
+import "dto.proto";
 
 message UserDto {
   uint64 id = 1;
@@ -12,10 +13,18 @@ message UserDto {
   role.RoleDto role = 5;
 }
 
+enum UserSortBy {
+  name = 0;
+  email = 1;
+  number = 2;
+}
+
 message UserSearch {
   optional string name = 1;
   optional string email = 2;
   optional string number = 3;
+  optional dto.SortOrder sort_order = 4;
+  optional UserSortBy sort_by = 5;
 }
 
 service UserController {
@@ -52,20 +61,23 @@ message UserCreateRequest {
 }
 
 message UserCreateResponse {
-  optional string generated_password = 1;
+  UserDto user = 1;
+  optional string generated_password = 2;
 }
 
 message UserUpdateRequest {
-  optional bytes card_bytes = 1;
-  optional string name = 2;
-  optional string email = 3;
-  optional uint32 number = 4;
-  optional uint64 RoleId = 5;
-  bool generate_password = 6;
+  uint64 id = 1;
+  optional bytes card_bytes = 2;
+  optional string name = 3;
+  optional string email = 4;
+  optional uint32 number = 5;
+  optional uint64 RoleId = 6;
+  bool generate_password = 7;
 }
 
 message UserUpdateResponse {
-  optional string generated_password = 1;
+  UserDto user = 1;
+  optional string generated_password = 2;
 }
 
 message UserDeleteRequest {

@@ -7,3 +7,7 @@ message Timestamp {
   int32 nanos = 2;
 }
 
+enum SortOrder {
+  ascending = 0;
+  descending = 1;
+}
