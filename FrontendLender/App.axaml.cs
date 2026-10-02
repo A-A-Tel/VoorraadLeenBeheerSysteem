@@ -1,11 +1,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-
 using FrontendLender.Services;
 using FrontendLender.ViewModels;
 using FrontendLender.Views;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendLender;
@@ -31,16 +29,10 @@ public class App : Application
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
-                desktop.MainWindow = new MainWindowView
-                {
-                    DataContext = main
-                };
+                desktop.MainWindow = new MainWindowView { DataContext = main };
                 break;
             case ISingleViewApplicationLifetime single:
-                single.MainView = new MainWindowView
-                {
-                    DataContext = main
-                };
+                single.MainView = new MainWindowView { DataContext = main };
                 break;
         }
 

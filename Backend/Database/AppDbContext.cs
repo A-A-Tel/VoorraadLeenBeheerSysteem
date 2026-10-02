@@ -1,12 +1,11 @@
+using System.Linq.Expressions;
 using System.Text.Json;
-
 using Backend.Database.Entities;
 using Backend.Database.Entities.Junctions;
-
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 using MySqlConnector;
 
 namespace Backend.Database;
@@ -38,14 +37,10 @@ public class AppDbContext : DbContext
         #region Config
 
         // Exclude soft deleted entities from queries
-        foreach (var entityType in builder.Model.GetEntityTypes())
-        {
+        foreach (IMutableEntityType entityType in builder.Model.GetEntityTypes())
             if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
-            {
                 builder.Entity(entityType.ClrType)
                     .HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
-            }
-        }
 
         // Set AuditLog.AuditData to appropriate column type
         ValueConverter<JsonDocument, string> jsonDocumentConverter =
@@ -277,14 +272,13 @@ public class AppDbContext : DbContext
         return uint.Parse(parsable);
     }
 
-    private static System.Linq.Expressions.LambdaExpression ConvertFilterExpression(Type type)
+    private static LambdaExpression ConvertFilterExpression(Type type)
     {
-        var parameter = System.Linq.Expressions.Expression.Parameter(type, "e");
-        var property = System.Linq.Expressions.Expression.Property(parameter, nameof(ISoftDeletable.DeletedAt));
-        var nullConstant = System.Linq.Expressions.Expression.Constant(null, typeof(DateTime?));
-        var comparison = System.Linq.Expressions.Expression.Equal(property, nullConstant);
+        ParameterExpression parameter = Expression.Parameter(type, "e");
+        MemberExpression property = Expression.Property(parameter, nameof(ISoftDeletable.DeletedAt));
+        ConstantExpression nullConstant = Expression.Constant(null, typeof(DateTime?));
+        BinaryExpression comparison = Expression.Equal(property, nullConstant);
 
-        return System.Linq.Expressions.Expression.Lambda(comparison, parameter);
+        return Expression.Lambda(comparison, parameter);
     }
-
 }

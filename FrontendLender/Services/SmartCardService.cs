@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using PCSC;
 using PCSC.Exceptions;
 using PCSC.Monitoring;
@@ -91,6 +90,7 @@ public sealed class SmartCardService : ISmartCardService
     public void Dispose()
     {
         if (_disposed) return;
+
         _disposed = true;
 
         Stop();
@@ -134,8 +134,7 @@ public sealed class SmartCardService : ISmartCardService
 
         // 1. Spin up monitors for every reader that is already connected.
         IEnumerable<string> readers = GetCurrentReaders();
-        foreach (string reader in readers)
-            AddReaderMonitor(reader);
+        foreach (string reader in readers) AddReaderMonitor(reader);
 
         // 2. Start the plug/unplug watcher in a background task.
         Task.Run(() => WatchPlugEvents(_cts.Token), _cts.Token);
@@ -203,8 +202,7 @@ public sealed class SmartCardService : ISmartCardService
 
     private void AddReaderMonitor(string readerName)
     {
-        if (_monitors.ContainsKey(readerName))
-            return; // already monitored
+        if (_monitors.ContainsKey(readerName)) return; // already monitored
 
         try
         {
@@ -235,8 +233,7 @@ public sealed class SmartCardService : ISmartCardService
 
     private void RemoveReaderMonitor(string readerName)
     {
-        if (!_monitors.TryRemove(readerName, out ISCardMonitor? monitor))
-            return;
+        if (!_monitors.TryRemove(readerName, out ISCardMonitor? monitor)) return;
 
         try
         {
@@ -255,8 +252,7 @@ public sealed class SmartCardService : ISmartCardService
 
     private void TearDownAllMonitors()
     {
-        foreach (string key in _monitors.Keys.ToList())
-            RemoveReaderMonitor(key);
+        foreach (string key in _monitors.Keys.ToList()) RemoveReaderMonitor(key);
     }
 
     // -------------------------------------------------------------------------
@@ -271,7 +267,6 @@ public sealed class SmartCardService : ISmartCardService
 
         Task.Run(() =>
         {
-
             byte[]? uid;
             try
             {
@@ -292,11 +287,12 @@ public sealed class SmartCardService : ISmartCardService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[SmartCardService] Error dispose callback from '{_cardDetectedCallback.Method}': {ex.Message}");
+                Console.WriteLine(
+                    $"[SmartCardService] Error dispose callback from '{_cardDetectedCallback.Method}': {ex.Message}");
                 return;
             }
-            if (disposeCallback) _cardDetectedCallback = null;
 
+            if (disposeCallback) _cardDetectedCallback = null;
         });
     }
 
@@ -397,7 +393,6 @@ public sealed class SmartCardService : ISmartCardService
 
     private void ThrowIfDisposed()
     {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(SmartCardService));
+        if (_disposed) throw new ObjectDisposedException(nameof(SmartCardService));
     }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-
+using System;
 using Avalonia;
-
 using ReactiveUI.Avalonia;
 
 namespace FrontendLender;

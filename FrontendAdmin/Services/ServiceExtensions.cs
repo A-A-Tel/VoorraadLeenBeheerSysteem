@@ -1,7 +1,5 @@
 using System;
-
 using FrontendAdmin.ViewModels;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin.Services;

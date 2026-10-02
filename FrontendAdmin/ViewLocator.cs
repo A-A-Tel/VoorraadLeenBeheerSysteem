@@ -1,9 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-
 using FrontendAdmin.ViewModels;
 
 namespace FrontendAdmin;
@@ -21,8 +19,7 @@ public class ViewLocator : IDataTemplate
         string name = data?.GetType().FullName!.Replace("ViewModel", "View") ?? "_";
         Type? type = Type.GetType(name);
 
-        if (type != null)
-            return (Control)Activator.CreateInstance(type)!;
+        if (type != null) return (Control)Activator.CreateInstance(type)!;
 
         return new TextBlock { Text = "Not Found: " + name };
     }

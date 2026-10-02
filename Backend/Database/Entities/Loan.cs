@@ -17,8 +17,6 @@ public class Loan : ISoftDeletable
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
-
     // Navigation properties
 
     public User? Lender { get; set; }
@@ -26,4 +24,6 @@ public class Loan : ISoftDeletable
     public User? Borrower { get; set; }
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
+
+    public DateTime? DeletedAt { get; set; }
 }

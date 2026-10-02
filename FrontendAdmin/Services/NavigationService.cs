@@ -1,15 +1,14 @@
 using System;
 using System.Threading.Tasks;
-
 using FrontendAdmin.ViewModels;
 
 namespace FrontendAdmin.Services;
 
 public interface INavigationService
 {
-    public Task NavigateTo<TViewModel>() where TViewModel : PageViewModelBase;
+    Task NavigateTo<TViewModel>() where TViewModel : PageViewModelBase;
 
-    public Task NavigateTo<TViewModel, TModel>(TModel? model = null)
+    Task NavigateTo<TViewModel, TModel>(TModel? model = null)
         where TViewModel : FormViewModelBase<TModel>
         where TModel : class;
 }

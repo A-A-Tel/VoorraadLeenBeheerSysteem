@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-
 using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
@@ -19,11 +18,11 @@ public class Product : ISoftDeletable
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
-
     // Navigation properties
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
     public ICollection<ProductRole> ProductRoles { get; set; } = [];
     public ICollection<ProductNote> ProductNotes { get; set; } = [];
+
+    public DateTime? DeletedAt { get; set; }
 }

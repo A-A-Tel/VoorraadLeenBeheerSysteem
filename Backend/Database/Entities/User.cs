@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
 using Backend.Database.Entities.Junctions;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities;
@@ -25,8 +23,6 @@ public class User : ISoftDeletable
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
-
     // Navigation properties
 
     public ICollection<Log> InvokedLogs { get; set; } = [];
@@ -37,4 +33,6 @@ public class User : ISoftDeletable
     public ICollection<UserRole> UserRoles { get; set; } = [];
     public ICollection<UserNote> UserNotes { get; set; } = [];
     public ICollection<UserRefreshToken> RefreshTokens { get; set; } = [];
+
+    public DateTime? DeletedAt { get; set; }
 }

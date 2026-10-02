@@ -1,4 +1,4 @@
-﻿namespace FrontendAdmin.Models;
+namespace FrontendAdmin.Models;
 
 public class AuditLogModel
 {

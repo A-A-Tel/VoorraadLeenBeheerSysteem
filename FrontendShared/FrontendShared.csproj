@@ -13,5 +13,5 @@
                   GrpcServices="Client"
         />
     </ItemGroup>
-    
+
 </Project>
