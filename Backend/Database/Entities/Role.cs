@@ -1,13 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
+using Protos.Role;
 
 namespace Backend.Database.Entities;
-
-public enum RoleTree
-{
-    Permission,
-    Department
-}
 
 public class Role
 {
@@ -22,7 +17,6 @@ public class Role
     public DateTime CreatedAt { get; set; }
 
     // Navigation properties
-
 
     public Role? Parent { get; set; }
 

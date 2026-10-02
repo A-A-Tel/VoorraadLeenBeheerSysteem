@@ -1,0 +1,31 @@
+syntax = "proto3";
+package storage.auth;
+option csharp_namespace = "Protos.Auth";
+
+service AuthController {
+  rpc AdminLogin (AdminLoginRequest) returns (LoginResponse);
+  rpc LenderLogin (LenderLoginRequest) returns (LoginResponse);
+  rpc LenderLookup (LenderLookupRequest) returns (LenderLookupResponse);
+}
+
+message AdminLoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LenderLoginRequest {
+  bytes card_bytes = 1;
+}
+
+message LoginResponse {
+  string jwt = 1;
+  string refresh_token = 2;
+}
+
+message LenderLookupRequest {
+  bytes card_bytes = 1;
+}
+
+message LenderLookupResponse {
+  string name = 1;
+}

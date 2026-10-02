@@ -1,0 +1,89 @@
+syntax = "proto3";
+package storage.user;
+option csharp_namespace = "Protos.User";
+
+import "role.proto";
+import "dto.proto";
+
+message UserDto {
+  uint64 id = 1;
+  optional bytes card_bytes = 2;
+  string name = 3;
+  string email = 4;
+  role.RoleDto role = 5;
+}
+
+enum UserSortBy {
+  name = 0;
+  email = 1;
+  number = 2;
+}
+
+message UserSearch {
+  optional string name = 1;
+  optional string email = 2;
+  optional string number = 3;
+  optional dto.SortOrder sort_order = 4;
+  optional UserSortBy sort_by = 5;
+}
+
+service UserController {
+  rpc List (UserListRequest) returns (UserListResponse);
+  rpc Get (UserGetRequest) returns (UserGetResponse);
+  rpc Create (UserCreateRequest) returns (UserCreateResponse);
+  rpc Update (UserUpdateRequest) returns (UserUpdateResponse);
+  rpc Delete (UserDeleteRequest) returns (UserDeleteResponse);
+}
+
+message UserListRequest {
+  optional UserSearch search = 1;
+}
+
+message UserListResponse {
+  repeated UserDto users = 1;
+}
+
+message UserGetRequest {
+  uint64 id = 1;
+}
+
+message UserGetResponse {
+  UserDto user = 1;
+}
+
+message UserCreateRequest {
+  optional bytes card_bytes = 1;
+  string name = 2;
+  string email = 3;
+  uint32 number = 4;
+  uint64 RoleId = 5;
+  bool generate_password = 6;
+}
+
+message UserCreateResponse {
+  UserDto user = 1;
+  optional string generated_password = 2;
+}
+
+message UserUpdateRequest {
+  uint64 id = 1;
+  optional bytes card_bytes = 2;
+  optional string name = 3;
+  optional string email = 4;
+  optional uint32 number = 5;
+  optional uint64 RoleId = 6;
+  bool generate_password = 7;
+}
+
+message UserUpdateResponse {
+  UserDto user = 1;
+  optional string generated_password = 2;
+}
+
+message UserDeleteRequest {
+  uint64 id = 1;
+}
+
+message UserDeleteResponse {
+  
+}

@@ -6,6 +6,8 @@ namespace Backend.Database;
 public class DevelopmentDbContext : AppDbContext
 {
     protected override string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP";
+    protected override string AuditLogDataColumnType => "TEXT";
+    protected override string UserCardBytesColumnType => "BLOB";
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {

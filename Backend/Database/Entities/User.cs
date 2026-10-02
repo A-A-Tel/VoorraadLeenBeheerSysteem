@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database.Entities;
 
-public class User
+[Index(nameof(Email), IsUnique = true)]
+[Index(nameof(Number), IsUnique = true)]
+public class User : ISoftDeletable
 {
     public ulong Id { get; set; }
 
@@ -13,12 +16,14 @@ public class User
 
     [MinLength(1)] [MaxLength(254)] public string Email { get; set; } = string.Empty;
 
-    [MinLength(1)] [MaxLength(255)] public string? PasswordHash { get; set; }
+    [MinLength(6)] [MaxLength(7)] public string Number { get; set; } = string.Empty;
 
-    [Required] public bool IsActive { get; set; } = true;
+    [MinLength(1)] [MaxLength(255)] public string? PasswordHash { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
 
     // Navigation properties
 
@@ -29,4 +34,5 @@ public class User
     public ICollection<Loan> BorrowedLoans { get; set; } = [];
     public ICollection<UserRole> UserRoles { get; set; } = [];
     public ICollection<UserNote> UserNotes { get; set; } = [];
+    public ICollection<UserRefreshToken> RefreshTokens { get; set; } = [];
 }

@@ -1,7 +1,9 @@
+using System.Text.Json;
 using Backend.Database.Entities;
 using Backend.Database.Entities.Junctions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MySqlConnector;
 
 namespace Backend.Database;
@@ -9,6 +11,8 @@ namespace Backend.Database;
 public class AppDbContext : DbContext
 {
     protected virtual string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP(6)";
+    protected virtual string AuditLogDataColumnType => "JSON";
+    protected virtual string UserCardBytesColumnType => "BINARY(7)";
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -16,15 +20,49 @@ public class AppDbContext : DbContext
     public DbSet<Note> Notes { get; set; }
     public DbSet<Log> Logs { get; set; }
     public DbSet<Loan> Loans { get; set; }
+    public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
     public DbSet<LoanProduct> LoanProducts { get; set; }
     public DbSet<ProductNote> ProductNotes { get; set; }
     public DbSet<ProductRole> ProductRoles { get; set; }
     public DbSet<UserNote> UserNotes { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    
+    public DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        #region Config
+
+        // Exclude soft deleted entities from queries
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                builder.Entity(entityType.ClrType)
+                    .HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
+            }
+        }
+        
+        // Set AuditLog.AuditData to appropriate column type
+        ValueConverter<JsonDocument, string> jsonDocumentConverter = 
+            new(
+                document => document.RootElement.GetRawText(), 
+                json => JsonDocument.Parse(json)
+            );
+        
+        builder.Entity<AuditLog>()
+            .Property(al => al.AuditData)
+            .HasColumnType(AuditLogDataColumnType)
+            .HasConversion(jsonDocumentConverter);
+        
+        // Set Users.CardBytes to appropriate column type
+        builder.Entity<User>()
+            .Property(u => u.CardBytes)
+            .HasColumnType(UserCardBytesColumnType);
+
+        #endregion
+        
         #region Junction Composite Keys
 
         builder.Entity<LoanProduct>()
@@ -104,6 +142,12 @@ public class AppDbContext : DbContext
             .HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
             .HasForeignKey(y => y.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserRefreshToken>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         #endregion
@@ -194,11 +238,6 @@ public class AppDbContext : DbContext
 
         #endregion
 
-        builder.Entity<User>()
-            .Property(x => x.IsActive)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValue(true);
-
         #endregion
     }
 
@@ -215,7 +254,14 @@ public class AppDbContext : DbContext
 
         options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
     }
-
+    
+    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+        {
+            builder
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
+        }
+    
     private static string GetEnv(string key)
     {
         return Environment.GetEnvironmentVariable(key) ??
@@ -227,11 +273,15 @@ public class AppDbContext : DbContext
         string parsable = GetEnv(key);
         return uint.Parse(parsable);
     }
-
-    protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
+    
+    private static System.Linq.Expressions.LambdaExpression ConvertFilterExpression(Type type)
     {
-        builder
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
+        var parameter = System.Linq.Expressions.Expression.Parameter(type, "e");
+        var property = System.Linq.Expressions.Expression.Property(parameter, nameof(ISoftDeletable.DeletedAt));
+        var nullConstant = System.Linq.Expressions.Expression.Constant(null, typeof(DateTime?));
+        var comparison = System.Linq.Expressions.Expression.Equal(property, nullConstant);
+        
+        return System.Linq.Expressions.Expression.Lambda(comparison, parameter);
     }
+
 }

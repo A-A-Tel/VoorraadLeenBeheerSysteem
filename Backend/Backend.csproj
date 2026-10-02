@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Audit.EntityFramework" />
         <PackageReference Include="Google.Protobuf"/>
         <PackageReference Include="Grpc.AspNetCore"/>
         <PackageReference Include="Grpc.Core"/>
@@ -27,14 +28,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
+
+        <Protobuf Include="..\Protos\**\*.proto"
+                  GrpcServices="Server" 
+                  Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"/>
     </ItemGroup>
 
     <ItemGroup>
-
-        <Protobuf Include="..\Protos\**\*.proto"
-                 Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"/>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 </Project>

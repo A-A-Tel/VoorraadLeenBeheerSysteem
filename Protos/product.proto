@@ -1,0 +1,121 @@
+syntax = "proto3";
+package storage.product;
+option csharp_namespace = "Protos.Product";
+
+import "dto.proto";
+
+message ProductDto {
+  uint64 id = 1;
+  string name = 2;
+  string description = 3;
+  int32 amount = 4;
+  optional string image_id = 5;
+}
+
+message ImageDto {
+  string id = 1;
+  bytes bytes = 2;
+}
+
+enum RoleSortBy {
+  name = 0;
+  description = 1;
+  amount = 2;
+}
+
+message ProductSearch {
+  optional string name = 1;
+  optional string description = 2;
+  optional dto.SortOrder sort_order = 3;
+  optional RoleSortBy sort_by = 4;
+}
+
+service ProductController {
+  rpc List (ProductListRequest) returns (ProductListResponse);
+  rpc Get (ProductGetRequest) returns (ProductListResponse);
+  rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
+  rpc Update (ProductUpdateRequest) returns (ProductUpdateResponse);
+  rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
+  rpc ImageGet (ProductImageGetRequest) returns (stream ProductImageGetResponse);
+  rpc ImageCreate (stream ProductImageCreateRequest) returns (ProductImageCreateResponse);
+  rpc ImageUpdate (stream ProductImageUpdateRequest) returns (ProductImageUpdateResponse);
+  rpc ImageDelete (ProductImageDeleteRequest) returns (ProductImageDeleteResponse);
+}
+
+message ProductListRequest {
+  optional ProductSearch search = 1;
+}
+
+message ProductListResponse {
+  repeated ProductDto products = 1;
+}
+
+message ProductGetRequest {
+  uint64 id = 1;
+}
+
+message ProductGetResponse {
+  ProductDto product= 1;
+}
+
+message ProductCreateRequest {
+  string name = 1;
+  string description = 2;
+  int32 amount = 3;
+}
+
+message ProductCreateResponse {
+  ProductDto product = 1;
+}
+
+message ProductUpdateRequest {
+  uint64 id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional int32 amount = 4;
+}
+
+message ProductUpdateResponse {
+  ProductDto product = 1;
+}
+
+message ProductDeleteRequest {
+  uint64 id = 1;
+}
+
+message ProductDeleteResponse {
+  
+}
+
+message ProductImageGetRequest {
+  string image_id = 1;
+}
+
+message ProductImageGetResponse {
+  ImageDto image = 1;
+}
+
+message ProductImageCreateRequest {
+  bytes bytes = 1;
+}
+
+message ProductImageCreateResponse {
+  string image_id = 1;
+}
+
+message ProductImageUpdateRequest {
+  string image_id = 1;
+  bytes bytes = 2;
+}
+
+message ProductImageUpdateResponse {
+  string image_id = 1;
+}
+
+message ProductImageDeleteRequest {
+  string image_id = 1;
+}
+
+message ProductImageDeleteResponse {
+  
+}

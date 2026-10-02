@@ -23,6 +23,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.12" />
     <PackageVersion Include="Microting.EntityFrameworkCore.MySql" Version="10.0.12" />
+    <PackageVersion Include="Audit.EntityFramework" Version="33.0.0" />
   </ItemGroup>
   <!-- GRPC -->
   <ItemGroup>
