@@ -7,15 +7,3 @@ message Timestamp {
   int32 nanos = 2;
 }
 
-enum RoleTree {
-  permission = 0;
-  title = 1;
-}
-
-message RoleDto {
-  uint64 id = 1;
-  optional RoleDto role = 2;
-  RoleTree tree = 3;
-  string Name = 4;
-}
-

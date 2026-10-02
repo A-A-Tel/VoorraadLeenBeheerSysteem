@@ -1,15 +1,15 @@
 syntax = "proto3";
-import "dto.proto";
 package storage.user;
-
 option csharp_namespace = "Protos.User";
+
+import "role.proto";
 
 message UserDto {
   uint64 id = 1;
   optional bytes card_bytes = 2;
   string name = 3;
   string email = 4;
-  dto.RoleDto role = 5;
+  role.RoleDto role = 5;
 }
 
 message UserSearch {
@@ -21,6 +21,9 @@ message UserSearch {
 service UserController {
   rpc List (UserListRequest) returns (UserListResponse);
   rpc Get (UserGetRequest) returns (UserGetResponse);
+  rpc Create (UserCreateRequest) returns (UserCreateResponse);
+  rpc Update (UserUpdateRequest) returns (UserUpdateResponse);
+  rpc Delete (UserDeleteRequest) returns (UserDeleteResponse);
 }
 
 message UserListRequest {

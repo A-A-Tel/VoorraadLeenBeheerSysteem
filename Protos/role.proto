@@ -1,0 +1,27 @@
+syntax = "proto3";
+package storage.role;
+option csharp_namespace = "Protos.Role";
+
+enum RoleTree {
+  permission = 0;
+  title = 1;
+}
+
+message RoleDto {
+  uint64 id = 1;
+  optional RoleDto role = 2;
+  RoleTree tree = 3;
+  string Name = 4;
+}
+
+service RoleController {
+  rpc ListRoles (RoleListRequest) returns (RoleListResponse);
+}
+
+message RoleListRequest {
+  RoleTree tree = 1;
+}
+
+message RoleListResponse {
+  repeated RoleDto roles = 1;
+}
