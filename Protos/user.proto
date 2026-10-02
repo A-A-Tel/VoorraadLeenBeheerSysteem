@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+import "dto.proto";
 package storage.user;
 
 option csharp_namespace = "Protos.User";
@@ -9,6 +9,7 @@ message UserDto {
   optional bytes card_bytes = 2;
   string name = 3;
   string email = 4;
+  dto.RoleDto role = 5;
 }
 
 message UserSearch {
@@ -43,6 +44,8 @@ message UserCreateRequest {
   string name = 2;
   string email = 3;
   uint32 number = 4;
+  uint64 RoleId = 5;
+  bool generate_password = 6;
 }
 
 message UserCreateResponse {
@@ -54,6 +57,8 @@ message UserUpdateRequest {
   optional string name = 2;
   optional string email = 3;
   optional uint32 number = 4;
+  optional uint64 RoleId = 5;
+  bool generate_password = 6;
 }
 
 message UserUpdateResponse {

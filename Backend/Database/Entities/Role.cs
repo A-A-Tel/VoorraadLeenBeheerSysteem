@@ -18,7 +18,6 @@ public class Role
 
     // Navigation properties
 
-
     public Role? Parent { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = [];
