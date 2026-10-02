@@ -2,11 +2,68 @@ syntax = "proto3";
 
 package storage.user;
 
-option csharp_namespace = "Storage.User";
+option csharp_namespace = "Protos.User";
 
 message UserDto {
   uint64 id = 1;
   optional bytes card_bytes = 2;
   string name = 3;
   string email = 4;
+}
+
+message UserSearch {
+  optional string name = 1;
+  optional string email = 2;
+  optional string number = 3;
+}
+
+service UserController {
+  rpc List (UserListRequest) returns (UserListResponse);
+  rpc Get (UserGetRequest) returns (UserGetResponse);
+}
+
+message UserListRequest {
+  optional UserSearch search = 1;
+}
+
+message UserListResponse {
+  repeated UserDto users = 1;
+}
+
+message UserGetRequest {
+  uint64 id = 1;
+}
+
+message UserGetResponse {
+  UserDto user = 1;
+}
+
+message UserCreateRequest {
+  optional bytes card_bytes = 1;
+  string name = 2;
+  string email = 3;
+  uint32 number = 4;
+}
+
+message UserCreateResponse {
+  optional string generated_password = 1;
+}
+
+message UserUpdateRequest {
+  optional bytes card_bytes = 1;
+  optional string name = 2;
+  optional string email = 3;
+  optional uint32 number = 4;
+}
+
+message UserUpdateResponse {
+  optional string generated_password = 1;
+}
+
+message UserDeleteRequest {
+  uint64 id = 1;
+}
+
+message UserDeleteResponse {
+  
 }

@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
 {
     protected virtual string CurrentDatetimeSyntax => "CURRENT_TIMESTAMP(6)";
     protected virtual string AuditLogDataColumnType => "JSON";
+    protected virtual string UserCardBytesColumnType => "BINARY(7)";
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -53,6 +54,11 @@ public class AppDbContext : DbContext
             .Property(al => al.AuditData)
             .HasColumnType(AuditLogDataColumnType)
             .HasConversion(jsonDocumentConverter);
+        
+        // Set Users.CardBytes to appropriate column type
+        builder.Entity<User>()
+            .Property(u => u.CardBytes)
+            .HasColumnType(UserCardBytesColumnType);
 
         #endregion
         

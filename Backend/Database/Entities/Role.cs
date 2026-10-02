@@ -1,13 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
+using Protos.Dto;
 
 namespace Backend.Database.Entities;
-
-public enum RoleTree
-{
-    Permission,
-    Department
-}
 
 public class Role
 {

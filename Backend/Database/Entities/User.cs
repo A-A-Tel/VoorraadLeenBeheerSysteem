@@ -13,6 +13,8 @@ public class User : ISoftDeletable
 
     [MinLength(1)] [MaxLength(254)] public string Email { get; set; } = string.Empty;
 
+    [MinLength(6)] [MaxLength(7)] public string Number { get; set; } = string.Empty;
+
     [MinLength(1)] [MaxLength(255)] public string? PasswordHash { get; set; }
 
     public DateTime CreatedAt { get; set; }

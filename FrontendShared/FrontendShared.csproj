@@ -9,7 +9,9 @@
     <ItemGroup>
 
         <Protobuf Include="..\Protos\**\*.proto"
-                  Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"/>
+                  Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"
+                  GrpcServices="Client"
+        />
     </ItemGroup>
     
 </Project>
