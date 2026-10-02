@@ -12,6 +12,11 @@ message ProductDto {
   optional string image_id = 5;
 }
 
+message ImageDto {
+  string id = 1;
+  bytes bytes = 2;
+}
+
 enum RoleSortBy {
   name = 0;
   description = 1;
@@ -31,6 +36,10 @@ service ProductController {
   rpc Create (ProductCreateRequest) returns (ProductCreateResponse);
   rpc Update (ProductUpdateRequest) returns (ProductUpdateResponse);
   rpc Delete (ProductDeleteRequest) returns (ProductDeleteResponse);
+  rpc ImageGet (ProductImageGetRequest) returns (stream ProductImageGetResponse);
+  rpc ImageCreate (stream ProductImageCreateRequest) returns (ProductImageCreateResponse);
+  rpc ImageUpdate (stream ProductImageUpdateRequest) returns (ProductImageUpdateResponse);
+  rpc ImageDelete (ProductImageDeleteRequest) returns (ProductImageDeleteResponse);
 }
 
 message ProductListRequest {
@@ -75,5 +84,38 @@ message ProductDeleteRequest {
 }
 
 message ProductDeleteResponse {
+  
+}
+
+message ProductImageGetRequest {
+  string image_id = 1;
+}
+
+message ProductImageGetResponse {
+  ImageDto image = 1;
+}
+
+message ProductImageCreateRequest {
+  bytes bytes = 1;
+}
+
+message ProductImageCreateResponse {
+  string image_id = 1;
+}
+
+message ProductImageUpdateRequest {
+  string image_id = 1;
+  bytes bytes = 2;
+}
+
+message ProductImageUpdateResponse {
+  string image_id = 1;
+}
+
+message ProductImageDeleteRequest {
+  string image_id = 1;
+}
+
+message ProductImageDeleteResponse {
   
 }
