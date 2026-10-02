@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using PCSC;
 using PCSC.Exceptions;
 using PCSC.Monitoring;
@@ -295,7 +296,7 @@ public sealed class SmartCardService : ISmartCardService
                 return;
             }
             if (disposeCallback) _cardDetectedCallback = null;
-            
+
         });
     }
 

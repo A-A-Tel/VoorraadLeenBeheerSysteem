@@ -1,4 +1,5 @@
 using Grpc.Core;
+
 using Protos.User;
 
 namespace Backend.Grpc.User;

@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+
 using Backend.Database.Entities.Junctions;
+
 using Protos.Role;
 
 namespace Backend.Database.Entities;
@@ -12,7 +14,7 @@ public class Role
 
     [Required] public RoleTree Tree { get; set; }
 
-    [MinLength(1)] [MaxLength(16)] public string Name { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(16)] public string Name { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 

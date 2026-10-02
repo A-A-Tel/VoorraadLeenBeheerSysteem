@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using Backend.Database.Entities.Junctions;
 
 namespace Backend.Database.Entities;
@@ -9,7 +10,7 @@ public class Note : ISoftDeletable
 
     public ulong? WriterId { get; set; }
 
-    [MinLength(1)] [MaxLength(512)] public string Content { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(512)] public string Content { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

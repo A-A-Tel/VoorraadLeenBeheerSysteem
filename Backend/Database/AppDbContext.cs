@@ -1,9 +1,12 @@
 using System.Text.Json;
+
 using Backend.Database.Entities;
 using Backend.Database.Entities.Junctions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 using MySqlConnector;
 
 namespace Backend.Database;
@@ -27,7 +30,7 @@ public class AppDbContext : DbContext
     public DbSet<ProductRole> ProductRoles { get; set; }
     public DbSet<UserNote> UserNotes { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    
+
     public DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -43,26 +46,26 @@ public class AppDbContext : DbContext
                     .HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
             }
         }
-        
+
         // Set AuditLog.AuditData to appropriate column type
-        ValueConverter<JsonDocument, string> jsonDocumentConverter = 
+        ValueConverter<JsonDocument, string> jsonDocumentConverter =
             new(
-                document => document.RootElement.GetRawText(), 
+                document => document.RootElement.GetRawText(),
                 json => JsonDocument.Parse(json)
             );
-        
+
         builder.Entity<AuditLog>()
             .Property(al => al.AuditData)
             .HasColumnType(AuditLogDataColumnType)
             .HasConversion(jsonDocumentConverter);
-        
+
         // Set Users.CardBytes to appropriate column type
         builder.Entity<User>()
             .Property(u => u.CardBytes)
             .HasColumnType(UserCardBytesColumnType);
 
         #endregion
-        
+
         #region Junction Composite Keys
 
         builder.Entity<LoanProduct>()
@@ -113,31 +116,31 @@ public class AppDbContext : DbContext
             .WithMany(x => x.Notes)
             .HasForeignKey(y => y.WriterId)
             .OnDelete(DeleteBehavior.SetNull);
-        
+
         builder.Entity<ProductNote>()
             .HasOne(x => x.Product)
             .WithMany(x => x.ProductNotes)
             .HasForeignKey(y => y.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Entity<ProductNote>()
             .HasOne(x => x.Note)
             .WithMany(x => x.ProductNotes)
             .HasForeignKey(y => y.NoteId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Entity<ProductRole>()
             .HasOne(x => x.Product)
             .WithMany(x => x.ProductRoles)
             .HasForeignKey(y => y.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Entity<UserNote>()
             .HasOne(x => x.Note)
             .WithMany(x => x.UserNotes)
             .HasForeignKey(y => y.NoteId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Entity<UserRole>()
             .HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
@@ -165,12 +168,12 @@ public class AppDbContext : DbContext
             builder.Entity<User>()
                 .Property(x => x.UpdatedAt)
         );
-        
+
         builder.Entity<Role>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
-        
+
         builder.Entity<Note>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -180,7 +183,7 @@ public class AppDbContext : DbContext
             builder.Entity<Note>()
                 .Property(x => x.UpdatedAt)
         );
-        
+
         builder.Entity<Loan>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -190,7 +193,7 @@ public class AppDbContext : DbContext
             builder.Entity<Loan>()
                 .Property(x => x.UpdatedAt)
         );
-        
+
         builder.Entity<Product>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -200,12 +203,12 @@ public class AppDbContext : DbContext
             builder.Entity<Product>()
                 .Property(x => x.UpdatedAt)
         );
-        
+
         builder.Entity<Log>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
-        
+
         builder.Entity<LoanProduct>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -215,22 +218,22 @@ public class AppDbContext : DbContext
             builder.Entity<LoanProduct>()
                 .Property(x => x.UpdatedAt)
         );
-        
+
         builder.Entity<ProductNote>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
-        
+
         builder.Entity<ProductRole>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
-        
+
         builder.Entity<UserNote>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
-        
+
         builder.Entity<UserRole>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
@@ -254,14 +257,14 @@ public class AppDbContext : DbContext
 
         options.UseMySql(builder.ConnectionString, ServerVersion.AutoDetect(builder.ConnectionString));
     }
-    
+
     protected virtual void UpdatedAtColumn<TProperty>(PropertyBuilder<TProperty> builder)
-        {
-            builder
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
-        }
-    
+    {
+        builder
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql($"{CurrentDatetimeSyntax} ON UPDATE {CurrentDatetimeSyntax}");
+    }
+
     private static string GetEnv(string key)
     {
         return Environment.GetEnvironmentVariable(key) ??
@@ -273,14 +276,14 @@ public class AppDbContext : DbContext
         string parsable = GetEnv(key);
         return uint.Parse(parsable);
     }
-    
+
     private static System.Linq.Expressions.LambdaExpression ConvertFilterExpression(Type type)
     {
         var parameter = System.Linq.Expressions.Expression.Parameter(type, "e");
         var property = System.Linq.Expressions.Expression.Property(parameter, nameof(ISoftDeletable.DeletedAt));
         var nullConstant = System.Linq.Expressions.Expression.Constant(null, typeof(DateTime?));
         var comparison = System.Linq.Expressions.Expression.Equal(property, nullConstant);
-        
+
         return System.Linq.Expressions.Expression.Lambda(comparison, parameter);
     }
 

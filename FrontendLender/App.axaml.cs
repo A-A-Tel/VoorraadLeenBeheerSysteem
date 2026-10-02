@@ -1,9 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+
 using FrontendLender.Services;
 using FrontendLender.ViewModels;
 using FrontendLender.Views;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendLender;
@@ -25,7 +27,7 @@ public class App : Application
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         INavigationService navigation = services.GetRequiredService<INavigationService>();
         navigation.NavigateTo<PAGE_NAME>().Wait();
-        
+
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
@@ -41,7 +43,7 @@ public class App : Application
                 };
                 break;
         }
-        
+
         base.OnFrameworkInitializationCompleted();
     }
 }

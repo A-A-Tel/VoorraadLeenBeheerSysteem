@@ -1,9 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+
 using FrontendAdmin.Services;
 using FrontendAdmin.ViewModels;
 using FrontendAdmin.Views;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendAdmin;
