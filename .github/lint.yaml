@@ -1,0 +1,38 @@
+# This does not work
+name: Code Style Verification
+
+on:
+  push:
+    branches: [ master, development ]
+#  pull_request:
+#    branches: [ master, development ]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    name: Verify Formatting
+
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install JetBrains ReSharper CLI Tools
+        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
+
+      - name: Restore Project Dependencies
+        run: dotnet restore StorageBorrowManagement.sln
+
+      - name: Execute Rider Code Cleanup Engine
+        run: jb cleanupcode StorageBorrowManagement.sln --profile="Built-in: Full Cleanup" --verbosity=WARN
+
+      - name: Verify no changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            exit 1
+          else
+            exit 0
+          fi

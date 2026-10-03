@@ -24,7 +24,7 @@ public class App : Application
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         INavigationService navigation = services.GetRequiredService<INavigationService>();
-        navigation.NavigateTo<PAGE_NAME>().Wait();
+        // navigation.NavigateTo<PAGE_NAME>().Wait();
 
         switch (ApplicationLifetime)
         {
