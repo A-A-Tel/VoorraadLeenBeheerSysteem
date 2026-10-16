@@ -1,4 +1,6 @@
+using System.Reflection;
 using Backend.Database;
+using Backend.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IWebHostEnvironment env = builder.Environment;
@@ -7,6 +9,8 @@ if (env.IsDevelopment())
     builder.Services.AddDbContext<AppDbContext, DevelopmentDbContext>();
 else
     builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddGrpc();
 
 WebApplication app = builder.Build();
 
@@ -30,5 +34,7 @@ using (IServiceScope scope = app.Services.CreateScope())
         Console.WriteLine($"💥 Database connection verification: CRASHED! Error: {ex.Message}");
     }
 }
+
+app.MapAllGrpcServices(Assembly.GetExecutingAssembly());
 
 app.Run();

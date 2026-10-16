@@ -35,7 +35,9 @@ Alles gemarkeerd met een sterretje is een optionele dependency voor in developme
       virtuele kaarten te maken voor gebruik in het programma.
     - Linux:
         - Arch en gerelateerd:
-            - Beschikbaar via de AUR onder de naam ```aur/vsmartcard```, deze is te installeren op de manier van voorkeur. Wil je de AUR niet gebruiken, kun je het altijd handmatig compileren volgens [de instructies van vsmartcard](https://frankmorgner.github.io/vsmartcard/virtualsmartcard/README.html#installation-on-linux-unix-and-similar).
+            - Beschikbaar via de AUR onder de naam ```aur/vsmartcard```, deze is te installeren op de manier van
+              voorkeur. Wil je de AUR niet gebruiken, kun je het altijd handmatig compileren
+              volgens [de instructies van vsmartcard](https://frankmorgner.github.io/vsmartcard/virtualsmartcard/README.html#installation-on-linux-unix-and-similar).
         - Debian en gerelateerd:
             - Direct beschikbaar in de officiële base repositories. Installatie via
               ```sudo apt install vsmartcard-vpcd vsmartcard-vpicc```.
@@ -57,32 +59,42 @@ opties over van de configuratiebestanden. Je kunt het dan ook direct uitvoeren i
 Gebruik dan Code-Cleanup over de hele solution voor het maken een PR, het is een benodigdheid om te kunnen mergen.
 
 Als je iets anders gebruikt, installeer dan de CLI-versie van de tool met:
+
 ```shell
 dotnet tool install -g JetBrains.ReSharper.GlobalTools
 ```
+
 Om het uit te voeren zoals de Github-Action dat doet:
+
 ```shell
 jb cleanupcode StorageBorrowManagement.sln --profile="Built-in: Full Cleanup" --verbosity=WARN
 ```
 
 ### Packages
 
-Deze solution gebruikt centraal pakketbeheer (CPM). Informatie hierover lees je op [de officiële documentatiepagina](https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management).
-Als je pakketten wilt toevoegen, probeer dan je IDE te gebruiken omdat deze het kan versimpelen. Mocht dit niet kunnen, gebruik dan de commandline in de directory van het project waarin je een pakket wilt toevoegen:
+Deze solution gebruikt centraal pakketbeheer (CPM). Informatie hierover lees je
+op [de officiële documentatiepagina](https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management).
+Als je pakketten wilt toevoegen, probeer dan je IDE te gebruiken omdat deze het kan versimpelen. Mocht dit niet kunnen,
+gebruik dan de commandline in de directory van het project waarin je een pakket wilt toevoegen:
+
 ```shell
 dotnet package add <package_name>
 ```
+
 Ga niet handmatig sleutelen aan de projectbestanden hiervoor, omdat CPM anders verstoort kan worden.
 
 Installeer de NuGet pakketten in de solution met deze commando:
+
 ```shell
 dotnet restore
 ```
 
 ### Testen
 
-In deze solution hebben we twee testprojecten (Backend.Tests en Frontend.Tests). Hierin wordt [NUnit](https://docs.nunit.org/) gebruikt voor de testen.
+In deze solution hebben we twee testprojecten (Backend.Tests en Frontend.Tests). Hierin
+wordt [NUnit](https://docs.nunit.org/) gebruikt voor de testen.
 Alle testen moet slagen voor je een PR kan mergen. Voer elke test in het project uit met:
+
 ```shell
 dotnet test --no-restore
 ```
