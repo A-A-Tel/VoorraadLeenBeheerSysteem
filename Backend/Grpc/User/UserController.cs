@@ -5,7 +5,7 @@ namespace Backend.Grpc.User;
 
 public class UserController : Protos.User.UserController.UserControllerBase
 {
-    public async override Task<UserListResponse> List(UserListRequest request, ServerCallContext context)
+    public override async Task<UserListResponse> List(UserListRequest request, ServerCallContext context)
     {
         return new UserListResponse();
     }

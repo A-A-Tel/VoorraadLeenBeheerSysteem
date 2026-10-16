@@ -7,22 +7,22 @@ public class Product : ISoftDeletable
 {
     public ulong Id { get; set; }
 
-    [MinLength(1)] [MaxLength(32)] public string Name { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(32)] public string Name { get; set; } = string.Empty;
 
-    [MinLength(1)] [MaxLength(512)] public string Description { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(512)] public string Description { get; set; } = string.Empty;
 
     [Required] public int Amount { get; set; }
 
-    [MinLength(1)] [MaxLength(64)] public string? ImageId { get; set; }
+    [MinLength(1)][MaxLength(64)] public string? ImageId { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-
-    public DateTime? DeletedAt { get; set; }
 
     // Navigation properties
 
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
     public ICollection<ProductRole> ProductRoles { get; set; } = [];
     public ICollection<ProductNote> ProductNotes { get; set; } = [];
+
+    public DateTime? DeletedAt { get; set; }
 }

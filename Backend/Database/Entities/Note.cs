@@ -9,12 +9,10 @@ public class Note : ISoftDeletable
 
     public ulong? WriterId { get; set; }
 
-    [MinLength(1)] [MaxLength(512)] public string Content { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(512)] public string Content { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-
-    public DateTime? DeletedAt { get; set; }
 
     // Navigation properties
 
@@ -22,4 +20,6 @@ public class Note : ISoftDeletable
 
     public ICollection<UserNote> UserNotes { get; set; } = [];
     public ICollection<ProductNote> ProductNotes { get; set; } = [];
+
+    public DateTime? DeletedAt { get; set; }
 }

@@ -10,7 +10,7 @@ public class Log
 
     public ulong? TargetId { get; set; }
 
-    [MinLength(1)] [MaxLength(255)] public string Action { get; set; } = string.Empty;
+    [MinLength(1)][MaxLength(255)] public string Action { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
