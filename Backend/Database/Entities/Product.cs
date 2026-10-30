@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
+using Protos.Role;
 
 namespace Backend.Database.Entities;
 
 public class Product : ISoftDeletable
 {
     public ulong Id { get; set; }
+
+    public TitleType TitleId {get; set; }
 
     [MinLength(1)][MaxLength(32)] public string Name { get; set; } = string.Empty;
 
@@ -20,8 +23,9 @@ public class Product : ISoftDeletable
 
     // Navigation properties
 
+    public Title Title { get; set; } = null!;
+
     public ICollection<LoanProduct> LoanProducts { get; set; } = [];
-    public ICollection<ProductRole> ProductRoles { get; set; } = [];
     public ICollection<ProductNote> ProductNotes { get; set; } = [];
 
     public DateTime? DeletedAt { get; set; }

@@ -37,7 +37,6 @@ public static class GrpcServiceExtensions
 
             foreach (Type controller in controllers)
             {
-                Console.WriteLine(controller.Name);
                 MethodInfo genericMethod = mapGrpcMethod.MakeGenericMethod(controller);
                 genericMethod.Invoke(null, [builder]);
             }

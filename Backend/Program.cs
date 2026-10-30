@@ -2,6 +2,8 @@ using System.Reflection;
 using Backend.Database;
 using Backend.Extensions;
 
+#region Before Build
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IWebHostEnvironment env = builder.Environment;
 
@@ -11,6 +13,10 @@ else
     builder.Services.AddDbContext<AppDbContext>();
 
 builder.Services.AddGrpc();
+
+#endregion
+
+#region After build
 
 WebApplication app = builder.Build();
 
@@ -38,3 +44,5 @@ using (IServiceScope scope = app.Services.CreateScope())
 app.MapAllGrpcServices(Assembly.GetExecutingAssembly());
 
 app.Run();
+
+#endregion

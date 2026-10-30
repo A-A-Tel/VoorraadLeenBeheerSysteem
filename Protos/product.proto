@@ -2,14 +2,16 @@ syntax = "proto3";
 package storage.product;
 option csharp_namespace = "Protos.Product";
 
+import "role.proto";
 import "dto.proto";
 
 message ProductDto {
   uint64 id = 1;
-  string name = 2;
-  string description = 3;
-  int32 amount = 4;
-  optional string image_id = 5;
+  role.TitleType title = 2;
+  string name = 3;
+  string description = 4;
+  int32 amount = 5;
+  optional string image_id = 6;
 }
 
 message ImageDto {
@@ -84,7 +86,7 @@ message ProductDeleteRequest {
 }
 
 message ProductDeleteResponse {
-  
+
 }
 
 message ProductImageGetRequest {
@@ -117,5 +119,5 @@ message ProductImageDeleteRequest {
 }
 
 message ProductImageDeleteResponse {
-  
+
 }

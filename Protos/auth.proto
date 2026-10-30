@@ -15,6 +15,7 @@ message AdminLoginRequest {
 
 message LenderLoginRequest {
   bytes card_bytes = 1;
+  string password = 2;
 }
 
 message LoginResponse {

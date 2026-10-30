@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MySqlConnector;
+using Protos.Role;
 
 namespace Backend.Database;
 
@@ -18,6 +19,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Title> Titles { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Note> Notes { get; set; }
     public DbSet<Log> Logs { get; set; }
@@ -26,9 +28,7 @@ public class AppDbContext : DbContext
 
     public DbSet<LoanProduct> LoanProducts { get; set; }
     public DbSet<ProductNote> ProductNotes { get; set; }
-    public DbSet<ProductRole> ProductRoles { get; set; }
     public DbSet<UserNote> UserNotes { get; set; }
-    public DbSet<UserRole> UserRoles { get; set; }
 
     public DbSet<AuditLog> AuditLogs { get; set; }
 
@@ -69,14 +69,8 @@ public class AppDbContext : DbContext
         builder.Entity<ProductNote>()
             .HasKey(x => new { x.ProductId, x.NoteId });
 
-        builder.Entity<ProductRole>()
-            .HasKey(x => new { x.ProductId, x.RoleId });
-
         builder.Entity<UserNote>()
             .HasKey(x => new { x.UserId, x.NoteId });
-
-        builder.Entity<UserRole>()
-            .HasKey(x => new { x.UserId, x.RoleId });
 
         #endregion
 
@@ -124,22 +118,10 @@ public class AppDbContext : DbContext
             .HasForeignKey(y => y.NoteId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<ProductRole>()
-            .HasOne(x => x.Product)
-            .WithMany(x => x.ProductRoles)
-            .HasForeignKey(y => y.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.Entity<UserNote>()
             .HasOne(x => x.Note)
             .WithMany(x => x.UserNotes)
             .HasForeignKey(y => y.NoteId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<UserRole>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.UserRoles)
-            .HasForeignKey(y => y.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<UserRefreshToken>()
@@ -163,11 +145,6 @@ public class AppDbContext : DbContext
             builder.Entity<User>()
                 .Property(x => x.UpdatedAt)
         );
-
-        builder.Entity<Role>()
-            .Property(x => x.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql(CurrentDatetimeSyntax);
 
         builder.Entity<Note>()
             .Property(x => x.CreatedAt)
@@ -219,22 +196,44 @@ public class AppDbContext : DbContext
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
 
-        builder.Entity<ProductRole>()
-            .Property(x => x.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql(CurrentDatetimeSyntax);
-
         builder.Entity<UserNote>()
             .Property(x => x.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql(CurrentDatetimeSyntax);
 
-        builder.Entity<UserRole>()
-            .Property(x => x.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql(CurrentDatetimeSyntax);
+        #endregion
 
         #endregion
+
+        #region Data
+
+        builder.Entity<Role>()
+            .HasData(
+                new Role
+                {
+                    Id = RoleType.Borrower,
+                },
+                new Role
+                {
+                    Id = RoleType.Lender,
+                },
+                new Role
+                {
+                    Id = RoleType.Manager,
+                }
+            );
+
+        builder.Entity<Title>()
+            .HasData(
+                new Title
+                {
+                    Id = TitleType.Student,
+                },
+                new Title
+                {
+                    Id = TitleType.Teacher,
+                }
+            );
 
         #endregion
     }
