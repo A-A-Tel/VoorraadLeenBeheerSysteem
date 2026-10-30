@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Protos.Role;
 
 namespace Backend.Database.Entities;

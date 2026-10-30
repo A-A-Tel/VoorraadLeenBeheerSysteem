@@ -8,7 +8,7 @@ public class Product : ISoftDeletable
 {
     public ulong Id { get; set; }
 
-    public TitleType TitleId {get; set; }
+    public TitleType TitleId { get; set; }
 
     [MinLength(1)][MaxLength(32)] public string Name { get; set; } = string.Empty;
 

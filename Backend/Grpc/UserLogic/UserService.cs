@@ -1,5 +1,3 @@
 namespace Backend.Grpc.UserLogic;
 
-public class UserService
-{
-}
+public class UserService { }

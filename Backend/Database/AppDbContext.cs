@@ -211,15 +211,15 @@ public class AppDbContext : DbContext
             .HasData(
                 new Role
                 {
-                    Id = RoleType.Borrower,
+                    Id = RoleType.Borrower
                 },
                 new Role
                 {
-                    Id = RoleType.Lender,
+                    Id = RoleType.Lender
                 },
                 new Role
                 {
-                    Id = RoleType.Manager,
+                    Id = RoleType.Manager
                 }
             );
 
@@ -227,11 +227,11 @@ public class AppDbContext : DbContext
             .HasData(
                 new Title
                 {
-                    Id = TitleType.Student,
+                    Id = TitleType.Student
                 },
                 new Title
                 {
-                    Id = TitleType.Teacher,
+                    Id = TitleType.Teacher
                 }
             );
 

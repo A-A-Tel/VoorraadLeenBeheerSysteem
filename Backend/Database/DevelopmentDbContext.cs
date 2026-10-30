@@ -1,5 +1,4 @@
 using Backend.Database.Entities;
-using Backend.Database.Entities.Junctions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,9 +17,7 @@ public class DevelopmentDbContext : AppDbContext
         const string relativePath = "Database/database.sqlite";
 
         if (!File.Exists(relativePath))
-            using (File.Create(relativePath))
-            {
-            }
+            using (File.Create(relativePath)) { }
 
         options.UseSqlite("Data Source=" + relativePath);
     }

@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Backend.Grpc;
+namespace Backend.Grpc.Interceptors;
 
 public class GrpcExceptionInterceptor : Interceptor
 {
@@ -36,7 +36,8 @@ public class GrpcExceptionInterceptor : Interceptor
         catch (Exception ex)
         {
             // HTTP 500
-            throw new RpcException(new Status(StatusCode.Internal, "An internal server error occurred. Please try again later."));
+            throw new RpcException(new Status(StatusCode.Internal,
+                "An internal server error occurred. Please try again later."));
         }
     }
 }
