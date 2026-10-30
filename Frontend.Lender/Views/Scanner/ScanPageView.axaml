@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Background="{StaticResource Background}"
+             x:Class="FrontendLender.Views.Scanner.ScanPageView">
+
+    <Grid HorizontalAlignment="Stretch" Margin="25">
+        <Svg Height="250" Width="250" Path="../../Assets/Icons/Scanner.svg"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,400,0,0" VerticalAlignment="Center" FontWeight="Bold" FontSize="36" Foreground="{StaticResource TextSecondary}" Text="Plaats uw kaart op de kaartlezer..."></TextBlock>
+        <Svg HorizontalAlignment="Right" Height="250" Width="250" Path="../../Assets/Icons/Arrow.svg"/>
+    </Grid>
+</UserControl>

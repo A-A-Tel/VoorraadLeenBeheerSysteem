@@ -22,4 +22,19 @@
         <FluentTheme />
     </Application.Styles>
 
+    <Application.Resources>
+        <SolidColorBrush x:Key="Accent">#FCCA60</SolidColorBrush>
+        <SolidColorBrush x:Key="ActionBad">#BA0005</SolidColorBrush>
+        <SolidColorBrush x:Key="ActionGood">#11D611</SolidColorBrush>
+        <SolidColorBrush x:Key="ActionNeutral">#EB8100</SolidColorBrush>
+        <SolidColorBrush x:Key="Background">#6250A3</SolidColorBrush>
+        <SolidColorBrush x:Key="Divider">#8A8787</SolidColorBrush>
+        <SolidColorBrush x:Key="Primary">#6E6EB5</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryDark">#2B2B5C</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryLight">#C8C8FA</SolidColorBrush>
+        <SolidColorBrush x:Key="Secondary">#FFFFFF</SolidColorBrush>
+        <SolidColorBrush x:Key="TextPrimary">#000000</SolidColorBrush>
+        <SolidColorBrush x:Key="TextSecondary">#FFFFFF</SolidColorBrush>
+    </Application.Resources>
+
 </Application>
