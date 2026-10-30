@@ -7,12 +7,12 @@ public class AuthController(AuthService service) : Protos.Auth.AuthController.Au
 {
     public override Task<LoginResponse> ManagerLogin(ManagerLoginRequest request, ServerCallContext context)
     {
-        return null!;
+        return service.LoginAsync(request);
     }
 
     public override Task<LoginResponse> LenderLogin(LenderLoginRequest request, ServerCallContext context)
     {
-        return null!;
+        return service.LoginAsync(request);
     }
 
     public override Task<LenderLookupResponse> LenderLookup(LenderLookupRequest request, ServerCallContext context)
