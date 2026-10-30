@@ -3,12 +3,12 @@ package storage.auth;
 option csharp_namespace = "Protos.Auth";
 
 service AuthController {
-  rpc AdminLogin (AdminLoginRequest) returns (LoginResponse);
+  rpc ManagerLogin (ManagerLoginRequest) returns (LoginResponse);
   rpc LenderLogin (LenderLoginRequest) returns (LoginResponse);
   rpc LenderLookup (LenderLookupRequest) returns (LenderLookupResponse);
 }
 
-message AdminLoginRequest {
+message ManagerLoginRequest {
   string email = 1;
   string password = 2;
 }

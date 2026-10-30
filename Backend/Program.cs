@@ -1,6 +1,8 @@
 using System.Reflection;
 using Backend.Database;
 using Backend.Extensions;
+using Backend.Grpc;
+using Backend.Grpc.AuthLogic;
 
 #region Before Build
 
@@ -12,7 +14,13 @@ if (env.IsDevelopment())
 else
     builder.Services.AddDbContext<AppDbContext>();
 
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<GrpcExceptionInterceptor>();
+});
+
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthRepository>();
 
 #endregion
 

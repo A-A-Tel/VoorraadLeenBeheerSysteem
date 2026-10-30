@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Protos.User;
 
-namespace Backend.Grpc.User;
+namespace Backend.Grpc.UserLogic;
 
 public class UserController : Protos.User.UserController.UserControllerBase
 {
