@@ -42,21 +42,17 @@ public static class GrpcServiceExtensions
         return builder;
     }
 
-    public static IServiceCollection AddApplicationServices(
-        this IServiceCollection services,
-        Assembly assembly)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, Assembly assembly)
     {
-        Type[] types = assembly.GetTypes()
-            .Where(t => t is { IsClass: true, IsAbstract: false })
-            .ToArray();
+        IEnumerable<Type> types = assembly.GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: false });
 
         foreach (Type implementation in types)
         {
             Type? interfaceType = implementation.GetInterfaces()
                 .FirstOrDefault(i =>
                     i.Name == $"I{implementation.Name}" &&
-                    (i.Name.EndsWith("Service") ||
-                     i.Name.EndsWith("Repository")));
+                    i.Name.EndsWith("Service"));
 
             if (interfaceType is null)
                 continue;

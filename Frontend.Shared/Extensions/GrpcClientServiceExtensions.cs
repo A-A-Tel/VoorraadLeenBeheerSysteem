@@ -9,8 +9,6 @@ public static class GrpcClientServiceExtensions
 {
     public static IServiceCollection AddGrpc(this IServiceCollection services)
     {
-        services.AddSingleton<IGrpcService, GrpcService>();
-
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>
             {

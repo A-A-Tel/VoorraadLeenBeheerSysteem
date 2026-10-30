@@ -1,9 +1,11 @@
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using FrontendLender.Services;
+using Backend.Extensions;
 using FrontendLender.ViewModels;
 using FrontendLender.Views;
+using FrontendShared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendLender;
@@ -19,7 +21,9 @@ public class App : Application
     {
         ServiceCollection serviceCollection = new();
 
-        serviceCollection.AddCommonServices();
+        Assembly assembly = Assembly.GetExecutingAssembly();
+
+        serviceCollection.AddApplicationServices(assembly);
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();

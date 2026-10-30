@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using FrontendLender.ViewModels;
+using FrontendShared.ViewModels;
 
-namespace FrontendLender.Services;
+namespace FrontendShared.Services;
 
 public interface INavigationService
 {
     Task NavigateTo<TViewModel>() where TViewModel : PageViewModelBase;
 
     Task NavigateTo<TViewModel, TModel>(TModel? model = null)
-        where TViewModel : FormViewModelBase<TModel>
+        where TViewModel : PageViewModelBase<TModel>
         where TModel : class;
 }
 
@@ -35,10 +35,10 @@ public class NavigationService : INavigationService
     }
 
     public async Task NavigateTo<TViewModel, TModel>(TModel? model = null)
-        where TViewModel : FormViewModelBase<TModel>
+        where TViewModel : PageViewModelBase<TModel>
         where TModel : class
     {
-        FormViewModelBase<TModel> vm = _vmFactory(typeof(TViewModel)) as TViewModel ??
+        PageViewModelBase<TModel> vm = _vmFactory(typeof(TViewModel)) as TViewModel ??
                                        throw new NullReferenceException("Form not found in service provider");
         await vm.LoadAsync(model);
 

@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using PCSC;
 using PCSC.Exceptions;
 using PCSC.Monitoring;
 
-namespace FrontendLender.Services;
+namespace FrontendShared.Services;
 
 public interface ISmartCardService : IDisposable
 {
@@ -28,7 +23,6 @@ public interface ISmartCardService : IDisposable
 ///     whenever a card is presented to any reader.
 ///     NuGet dependencies:
 ///     PCSC            >= 6.x   (dotnet add package PCSC)
-///     PCSC.Reactive   >= 6.x   (dotnet add package PCSC.Reactive)  [optional – not used here]
 ///     Usage:
 ///     var svc = new SmartCardService();
 ///     svc.SetCardDetectedCallback(uid =>
