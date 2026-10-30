@@ -90,5 +90,9 @@
             <DependentUpon>UserPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Scanner\ScanPageView.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>ScanPageView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 </Project>
