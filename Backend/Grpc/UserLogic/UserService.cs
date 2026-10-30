@@ -1,3 +1,5 @@
 namespace Backend.Grpc.UserLogic;
 
-public class UserService { }
+public interface IUserService { }
+
+public class UserService : IUserService { }

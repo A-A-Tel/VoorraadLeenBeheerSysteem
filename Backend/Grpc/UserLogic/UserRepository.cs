@@ -1,3 +1,5 @@
 namespace Backend.Grpc.UserLogic;
 
-public class UserRepository { }
+public interface IUserRepository { }
+
+public class UserRepository : IUserRepository { }

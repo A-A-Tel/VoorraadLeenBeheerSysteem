@@ -2,8 +2,6 @@ using FrontendShared.Interceptors;
 using FrontendShared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Protos.Auth;
-using Protos.Product;
-using Protos.User;
 
 namespace FrontendShared.Extensions;
 
@@ -11,7 +9,7 @@ public static class GrpcClientServiceExtensions
 {
     public static IServiceCollection AddGrpc(this IServiceCollection services)
     {
-        services.AddSingleton<GrpcService>();
+        services.AddSingleton<IGrpcService, GrpcService>();
 
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>

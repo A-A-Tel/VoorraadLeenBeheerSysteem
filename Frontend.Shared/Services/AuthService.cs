@@ -9,7 +9,7 @@ public interface IAuthService
     string LenderLookup(byte[] cardBytes);
 }
 
-public class AuthService() : IAuthService
+public class AuthService : IAuthService
 {
     public bool ManagerLogin(string email, string password)
     {

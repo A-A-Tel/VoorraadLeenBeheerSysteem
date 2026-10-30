@@ -2,15 +2,15 @@ using System.Reflection;
 using System.Text;
 using Backend.Database;
 using Backend.Extensions;
-using Backend.Grpc.AuthLogic;
 using Backend.Grpc.Interceptors;
-using Backend.Grpc.Universal;
+using Backend.Grpc.UserLogic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 #region Before Build
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IWebHostEnvironment env = builder.Environment;
 
 string jwtSecret;
@@ -52,17 +52,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddGrpc(options => { options.Interceptors.Add<GrpcExceptionInterceptor>(); });
-
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<AuthRepository>();
-
-builder.Services.AddSingleton<IPasswordService, PasswordService>();
+builder.Services.AddApplicationServices(typeof(UserRepository).Assembly);
 
 #endregion
 
-#region After build
-
 WebApplication app = builder.Build();
+
+#region After build
 
 using (IServiceScope scope = app.Services.CreateScope())
 {
@@ -90,7 +86,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapAllGrpcServices(Assembly.GetExecutingAssembly());
+app.MapGrpcControllers(Assembly.GetExecutingAssembly());
 
 app.Run();
 

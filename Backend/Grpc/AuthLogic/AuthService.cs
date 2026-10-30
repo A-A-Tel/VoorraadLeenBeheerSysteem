@@ -10,7 +10,7 @@ using Protos.Role;
 
 namespace Backend.Grpc.AuthLogic;
 
-public class AuthService(AuthRepository repository, IConfiguration configuration, IPasswordService passwordService)
+public class AuthService(IAuthRepository repository, IConfiguration configuration, IPasswordService passwordService)
 {
     public async Task<LenderLookupResponse> GetLenderName(LenderLookupRequest request)
     {

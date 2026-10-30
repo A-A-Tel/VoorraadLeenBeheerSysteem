@@ -1,10 +1,16 @@
 using Backend.Database;
 using Backend.Database.Entities;
 using Backend.Grpc.Universal;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Grpc.AuthLogic;
+
+public interface IAuthRepository
+{
+    Task<User?> GetUserAsync(byte[] cardBytes);
+    Task<User?> GetUserAsync(string email);
+    Task RehashPasswordAsync(User user, string password);
+}
 
 public class AuthRepository(AppDbContext database, IPasswordService passwordService)
 {
