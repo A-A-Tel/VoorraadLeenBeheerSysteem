@@ -6,7 +6,7 @@
              Background="{StaticResource Background}"
              x:Class="FrontendLender.Views.Login.LoginPageView">
 
-    <Grid HorizontalAlignment="Stretch" Background="{StaticResource Secondary}" Margin="25">
-
+    <Grid HorizontalAlignment="Stretch" Margin="25">
+        <Border Width="450" Height="500" Background="{StaticResource Secondary}" CornerRadius="30" BorderBrush="{StaticResource TextPrimary}" BorderThickness="3"></Border>
     </Grid>
 </UserControl>
