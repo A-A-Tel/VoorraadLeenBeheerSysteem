@@ -92,7 +92,18 @@
         </Compile>
         <Compile Update="Views\Scanner\ScanPageView.axaml.cs">
           <SubType>Code</SubType>
+          <DependentUpon>LoginPageView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Login\LoginPageView.axaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Login\ScanPageView.axaml.cs">
+          <SubType>Code</SubType>
           <DependentUpon>ScanPageView.axaml</DependentUpon>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Login\LoginPageView.axaml" />
     </ItemGroup>
 </Project>

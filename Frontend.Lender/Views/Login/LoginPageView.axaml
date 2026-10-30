@@ -7,6 +7,30 @@
              x:Class="FrontendLender.Views.Login.LoginPageView">
 
     <Grid HorizontalAlignment="Stretch" Margin="25">
-        <Border Width="450" Height="500" Background="{StaticResource Secondary}" CornerRadius="30" BorderBrush="{StaticResource TextPrimary}" BorderThickness="3"></Border>
+        <Border Width="425" Height="450" Padding="30" Background="{StaticResource Secondary}" CornerRadius="30" BorderBrush="{StaticResource TextPrimary}" BorderThickness="3">
+            <StackPanel Spacing="25">
+                <StackPanel Spacing="12">
+                    <TextBlock FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}" Text="Welkom [Naam]"></TextBlock>
+                    <TextBlock FontSize="16" Foreground="{StaticResource Divider}" Text="Log in met je naam en wachtwoord."></TextBlock>
+                </StackPanel>
+                <StackPanel Spacing="5">
+                    <TextBlock FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextPrimary}" Text="Naam"></TextBlock>
+                    <TextBox Padding="15" FontSize="16" Text="Anouar" IsEnabled="False" CornerRadius="10" BorderBrush="{StaticResource Divider}" BorderThickness="1"></TextBox>
+                </StackPanel>
+                <StackPanel Spacing="5">
+                    <TextBlock FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextPrimary}" Text="Wachtwoord"></TextBlock>
+                    <TextBox Name="PasswordField" PasswordChar="•" RevealPassword="False" Padding="15" FontSize="16" PlaceholderText="Vul je wachtwoord in" CornerRadius="10" BorderBrush="{StaticResource Divider}" BorderThickness="1">
+                        <TextBox.InnerRightContent>
+                            <Button Click="PasswordVisibility" Margin="0,0,10,0" Padding="5, 5, 5, 5" Background="Transparent" >
+                                <Svg Name="Icon" Height="20" Width="20" Path="../../Assets/Icons/Eye.svg"/>
+                            </Button>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                </StackPanel>
+                <Button Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" CornerRadius="10" Background="{StaticResource Background}">
+                    <TextBlock FontSize="16" FontWeight="Bold"  Foreground="{StaticResource TextSecondary}" Text="Inloggen"></TextBlock>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>
