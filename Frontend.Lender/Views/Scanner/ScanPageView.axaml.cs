@@ -4,7 +4,7 @@ using FrontendLender.ViewModels;
 
 namespace FrontendLender.Views.Scanner;
 
-public partial class ScanPageView : Window
+public partial class ScanPageView : UserControl
 {
     public ScanPageView()
     {
