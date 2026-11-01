@@ -17,10 +17,7 @@ public static class AvaloniaServiceExtensions
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsSubclassOf(typeof(ViewModelBase)) && t is { IsClass: true, IsAbstract: false });
 
-            foreach (Type viewModel in viewModels)
-            {
-                services.AddSingleton(viewModel);
-            }
+            foreach (Type viewModel in viewModels) services.AddSingleton(viewModel);
 
             return services;
         }
@@ -36,7 +33,7 @@ public static class AvaloniaServiceExtensions
                     .FirstOrDefault(i =>
                         i.Name == $"I{implementation.Name}" &&
                         (i.Name.EndsWith("Service") || i.Name.EndsWith("Factory"))
-                        );
+                    );
 
                 if (interfaceType is null)
                     continue;

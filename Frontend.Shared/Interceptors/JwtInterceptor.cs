@@ -1,17 +1,11 @@
+using FrontendShared.Services;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
 namespace FrontendShared.Interceptors;
 
-public class JwtInterceptor : Interceptor
+public class JwtInterceptor(GrpcService grpc) : Interceptor
 {
-    private readonly Func<string?> _getToken;
-
-    public JwtInterceptor(Func<string?> getToken)
-    {
-        _getToken = getToken;
-    }
-
     private ClientInterceptorContext<TRequest, TResponse> AddToken<TRequest, TResponse>(
         ClientInterceptorContext<TRequest, TResponse> context)
         where TRequest : class
@@ -19,7 +13,7 @@ public class JwtInterceptor : Interceptor
     {
         Metadata headers = context.Options.Headers ?? [];
 
-        string? token = _getToken();
+        string? token = grpc.JwtToken;
 
         if (!string.IsNullOrWhiteSpace(token)) headers.Add("Authorization", $"Bearer {token}");
 

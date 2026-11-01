@@ -1,14 +1,10 @@
-using System;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using FrontendLender.ViewModels;
-using FrontendLender.ViewModels.Login;
 using FrontendLender.ViewModels.LoginScan;
-using FrontendLender.Views.LoginScan;
-using FrontendShared.Services;
 using FrontendShared.Extensions;
+using FrontendShared.Services;
 using FrontendShared.ViewModels;
 using FrontendShared.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +31,7 @@ public class App : Application
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         INavigationService navigation = services.GetRequiredService<INavigationService>();
-        navigation.NavigateToAsync<LoginPageViewModel>().Wait();
+        navigation.NavigateToAsync<LoginScanPageViewModel>().GetAwaiter().GetResult();
 
         switch (ApplicationLifetime)
         {

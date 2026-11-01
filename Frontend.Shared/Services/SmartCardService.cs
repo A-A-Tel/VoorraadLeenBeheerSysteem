@@ -24,6 +24,7 @@ public interface ISmartCardService : IDisposable
 ///     NuGet dependencies:
 ///     PCSC            >= 6.x   (dotnet add package PCSC)
 ///     Usage:
+///     <code>
 ///     var svc = new SmartCardService();
 ///     svc.SetCardDetectedCallback(uid =>
 ///     Console.WriteLine("Card UID: " + BitConverter.ToString(uid)));
@@ -31,9 +32,13 @@ public interface ISmartCardService : IDisposable
 ///     // ... later ...
 ///     svc.Stop();
 ///     svc.Dispose();
+///     </code>
 /// </summary>
 public sealed class SmartCardService : ISmartCardService
 {
+    /// <summary>The rate the plug events thread polls to check for new readers.</summary>
+    private const int PollRate = 1_000;
+
     // -------------------------------------------------------------------------
     // APDU that asks the reader for the card UID (Get Data – UID)
     // -------------------------------------------------------------------------
@@ -154,14 +159,14 @@ public sealed class SmartCardService : ISmartCardService
     /// </summary>
     private async Task WatchPlugEvents(CancellationToken ct)
     {
-        HashSet<string> known = new(GetCurrentReaders());
+        HashSet<string> known = [.. GetCurrentReaders()];
 
         while (!ct.IsCancellationRequested)
             try
             {
-                await Task.Delay(1_000, ct); // poll every second
+                await Task.Delay(PollRate, ct); // poll every second
 
-                HashSet<string> current = new(GetCurrentReaders());
+                HashSet<string> current = [.. GetCurrentReaders()];
 
                 // Newly plugged readers
                 foreach (string r in current.Except(known))
@@ -273,20 +278,16 @@ public sealed class SmartCardService : ISmartCardService
                 return;
             }
 
-            Console.WriteLine(string.Join(',', uid));
-            bool disposeCallback;
+            Console.Write($" - {string.Join(',', uid)}");
             try
             {
-                disposeCallback = _cardDetectedCallback(uid);
+                if (_cardDetectedCallback(uid)) _cardDetectedCallback = null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(
-                    $"[SmartCardService] Error dispose callback from '{_cardDetectedCallback.Method}': {ex.Message}");
-                return;
+                    $"[SmartCardService] Error dispose callback from '{_cardDetectedCallback?.Method}': {ex.Message}");
             }
-
-            if (disposeCallback) _cardDetectedCallback = null;
         });
     }
 
