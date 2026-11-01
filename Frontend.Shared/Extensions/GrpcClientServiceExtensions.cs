@@ -7,7 +7,7 @@ namespace FrontendShared.Extensions;
 
 public static class GrpcClientServiceExtensions
 {
-    public static IServiceCollection AddGrpc(this IServiceCollection services)
+    public static IServiceCollection AddGrpcClients(this IServiceCollection services)
     {
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>

@@ -16,18 +16,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Backend\Backend.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Avalonia" />
+        <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Grpc.AspNetCore" />
         <PackageReference Include="Grpc.Net.Client"/>
         <PackageReference Include="Grpc.Tools">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="PCSC" />
-        <PackageReference Include="ReactiveUI.Avalonia" />
+        <PackageReference Include="PCSC"/>
+        <PackageReference Include="ReactiveUI.Avalonia"/>
     </ItemGroup>
 
 </Project>

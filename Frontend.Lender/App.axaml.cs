@@ -1,11 +1,13 @@
+using System;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Backend.Extensions;
 using FrontendLender.ViewModels;
-using FrontendLender.Views;
 using FrontendShared.Services;
+using FrontendShared.Extensions;
+using FrontendShared.ViewModels;
+using FrontendShared.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendLender;
@@ -20,10 +22,12 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceCollection serviceCollection = new();
+        Assembly assembly = GetType().Assembly;
 
-        Assembly assembly = Assembly.GetExecutingAssembly();
-
-        serviceCollection.AddApplicationServices(assembly);
+        serviceCollection
+            .AddViewModels(assembly)
+            .AddApplicationServices()
+            .AddGrpcClients();
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();

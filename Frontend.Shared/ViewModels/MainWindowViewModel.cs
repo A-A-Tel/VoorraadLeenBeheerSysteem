@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace FrontendShared.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject
+public class MainWindowViewModel : ViewModelBase
 {
     public ViewModelBase? CurrentPage
     {

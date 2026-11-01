@@ -12,7 +12,6 @@
         <PackageReference Include="Audit.EntityFramework"/>
         <PackageReference Include="Google.Protobuf"/>
         <PackageReference Include="Grpc.AspNetCore"/>
-        <PackageReference Include="Grpc.Core"/>
         <PackageReference Include="Grpc.Tools">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

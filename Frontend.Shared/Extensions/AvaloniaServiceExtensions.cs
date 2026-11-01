@@ -1,4 +1,5 @@
 using System.Reflection;
+using FrontendShared.Services;
 using FrontendShared.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,20 +11,23 @@ public static class AvaloniaServiceExtensions
     {
         public IServiceCollection AddViewModels(Assembly assembly)
         {
-            IEnumerable<Type> viewModels = assembly.GetTypes()
+            Assembly[] assemblies = [typeof(MainWindowViewModel).Assembly, assembly];
+
+            IEnumerable<Type> viewModels = assemblies
+                .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsSubclassOf(typeof(ViewModelBase)) && t is { IsClass: true, IsAbstract: false });
 
             foreach (Type viewModel in viewModels)
             {
-                services.AddScoped(viewModel);
+                services.AddSingleton(viewModel);
             }
 
             return services;
         }
 
-        public IServiceCollection AddApplicationServices(Assembly assembly)
+        public IServiceCollection AddApplicationServices()
         {
-            IEnumerable<Type> types = assembly.GetTypes()
+            IEnumerable<Type> types = typeof(INavigationService).Assembly.GetTypes()
                 .Where(t => t is { IsClass: true, IsAbstract: false });
 
             foreach (Type implementation in types)
@@ -36,7 +40,7 @@ public static class AvaloniaServiceExtensions
                 if (interfaceType is null)
                     continue;
 
-                services.AddScoped(interfaceType, implementation);
+                services.AddSingleton(interfaceType, implementation);
             }
 
             return services;
