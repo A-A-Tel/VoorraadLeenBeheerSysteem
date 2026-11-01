@@ -4,42 +4,31 @@ namespace FrontendShared.Services;
 
 public interface INavigationService
 {
-    Task NavigateTo<TViewModel>() where TViewModel : PageViewModelBase;
+    Task NavigateToAsync<TViewModel>() where TViewModel : PageViewModelBase;
 
-    Task NavigateTo<TViewModel, TModel>(TModel? model = null)
+    Task NavigateToAsync<TViewModel, TModel>(TModel? model = null)
         where TViewModel : PageViewModelBase<TModel>
         where TModel : class;
 }
 
-public class NavigationService : INavigationService
+public class NavigationService(MainWindowViewModel mainWindow, IViewModelFactory viewModelFactory) : INavigationService
 {
-    private readonly MainWindowViewModel _mainWindow;
-    private readonly Func<Type, ViewModelBase?> _vmFactory;
-
-    public NavigationService(MainWindowViewModel mainWindow, Func<Type, ViewModelBase?> vmFactory)
-    {
-        _mainWindow = mainWindow;
-        _vmFactory = vmFactory;
-    }
-
-    public async Task NavigateTo<TViewModel>()
+    public async Task NavigateToAsync<TViewModel>()
         where TViewModel : PageViewModelBase
     {
-        PageViewModelBase vm = _vmFactory(typeof(TViewModel)) as TViewModel ??
-                               throw new NullReferenceException("Page not found in service provider");
+        PageViewModelBase vm = viewModelFactory.Get<TViewModel>();
         await vm.LoadAsync();
 
-        _mainWindow.CurrentPage = vm;
+        mainWindow.CurrentPage = vm;
     }
 
-    public async Task NavigateTo<TViewModel, TModel>(TModel? model = null)
+    public async Task NavigateToAsync<TViewModel, TModel>(TModel? model = null)
         where TViewModel : PageViewModelBase<TModel>
         where TModel : class
     {
-        PageViewModelBase<TModel> vm = _vmFactory(typeof(TViewModel)) as TViewModel ??
-                                       throw new NullReferenceException("Form not found in service provider");
+        PageViewModelBase<TModel> vm = viewModelFactory.Get<TViewModel>();
         await vm.LoadAsync(model);
 
-        _mainWindow.CurrentPage = vm;
+        mainWindow.CurrentPage = vm;
     }
 }

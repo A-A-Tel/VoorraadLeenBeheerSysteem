@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using FrontendShared.ViewModels;
 
-namespace FrontendLender.ViewModels.LoginScan;
+namespace FrontendLender.ViewModels.Login;
 
-public class LoginScanViewModel : PageViewModelBase
+public class LoginPageViewModel : PageViewModelBase
 {
     public override Task LoadAsync()
     {

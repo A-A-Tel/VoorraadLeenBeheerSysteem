@@ -35,7 +35,8 @@ public static class AvaloniaServiceExtensions
                 Type? interfaceType = implementation.GetInterfaces()
                     .FirstOrDefault(i =>
                         i.Name == $"I{implementation.Name}" &&
-                        i.Name.EndsWith("Service"));
+                        (i.Name.EndsWith("Service") || i.Name.EndsWith("Factory"))
+                        );
 
                 if (interfaceType is null)
                     continue;
