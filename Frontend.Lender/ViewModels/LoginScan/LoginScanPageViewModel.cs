@@ -6,7 +6,10 @@ using FrontendShared.ViewModels;
 
 namespace FrontendLender.ViewModels.LoginScan;
 
-public class LoginScanPageViewModel(INavigationService navigationService, IAuthService authService, ISmartCardService smartCardService) : PageViewModelBase
+public class LoginScanPageViewModel(
+    INavigationService navigationService,
+    IAuthService authService,
+    ISmartCardService smartCardService) : PageViewModelBase
 {
     private async Task<bool> LookupCallback(byte[] uid)
     {

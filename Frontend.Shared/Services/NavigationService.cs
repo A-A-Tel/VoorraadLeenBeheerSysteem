@@ -11,7 +11,10 @@ public interface INavigationService
         where TModel : class;
 }
 
-public class NavigationService(MainWindowViewModel mainWindow, IViewModelFactory viewModelFactory, ISmartCardService smartCardService) : INavigationService
+public class NavigationService(
+    MainWindowViewModel mainWindow,
+    IViewModelFactory viewModelFactory,
+    ISmartCardService smartCardService) : INavigationService
 {
     public async Task NavigateToAsync<TViewModel>()
         where TViewModel : PageViewModelBase

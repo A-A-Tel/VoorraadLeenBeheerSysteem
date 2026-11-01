@@ -33,8 +33,6 @@ public static class GrpcClientServiceExtensions
             })
             .AddInterceptor<JwtInterceptor>();
 
-        services.AddSingleton<JwtInterceptor>();
-
-        return services;
+        return services.AddSingleton<JwtInterceptor>();
     }
 }

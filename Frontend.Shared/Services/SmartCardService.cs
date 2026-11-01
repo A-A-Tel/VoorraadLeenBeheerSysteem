@@ -268,7 +268,7 @@ public sealed class SmartCardService : ISmartCardService
             ref _cardDetectedCallback,
             null,
             null
-            );
+        );
 
         Task.Run(async () =>
         {
@@ -287,11 +287,12 @@ public sealed class SmartCardService : ISmartCardService
             Console.Write($" - {string.Join(',', uid)}");
             try
             {
-                if (await callback(uid)) Interlocked.CompareExchange(
-                    ref _cardDetectedCallback,
-                    null,
-                    callback
-                );
+                if (await callback(uid))
+                    Interlocked.CompareExchange(
+                        ref _cardDetectedCallback,
+                        null,
+                        callback
+                    );
             }
             catch (Exception ex)
             {

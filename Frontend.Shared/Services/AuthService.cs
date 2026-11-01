@@ -13,7 +13,8 @@ public interface IAuthService
     Task<string?> LenderLookup(byte[] cardBytes);
 }
 
-public class AuthService(AuthController.AuthControllerClient client, INavigationService navigationService) : IAuthService
+public class AuthService(AuthController.AuthControllerClient client, INavigationService navigationService)
+    : IAuthService
 {
     public bool ManagerLogin(string email, string password)
     {
