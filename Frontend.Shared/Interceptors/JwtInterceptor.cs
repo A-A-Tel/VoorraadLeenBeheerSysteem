@@ -4,7 +4,7 @@ using Grpc.Core.Interceptors;
 
 namespace FrontendShared.Interceptors;
 
-public class JwtInterceptor(GrpcService grpc) : Interceptor
+public class JwtInterceptor(IGrpcService grpc) : Interceptor
 {
     private ClientInterceptorContext<TRequest, TResponse> AddToken<TRequest, TResponse>(
         ClientInterceptorContext<TRequest, TResponse> context)

@@ -12,7 +12,7 @@ public static class GrpcClientServiceExtensions
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>
             {
-                GrpcService grpcService = sp.GetRequiredService<GrpcService>();
+                IGrpcService grpcService = sp.GetRequiredService<IGrpcService>();
                 o.Address = grpcService.Address;
             })
             .AddInterceptor<JwtInterceptor>();
@@ -20,7 +20,7 @@ public static class GrpcClientServiceExtensions
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>
             {
-                GrpcService grpcService = sp.GetRequiredService<GrpcService>();
+                IGrpcService grpcService = sp.GetRequiredService<IGrpcService>();
                 o.Address = grpcService.Address;
             })
             .AddInterceptor<JwtInterceptor>();
@@ -28,10 +28,12 @@ public static class GrpcClientServiceExtensions
         services
             .AddGrpcClient<AuthController.AuthControllerClient>((sp, o) =>
             {
-                GrpcService grpcService = sp.GetRequiredService<GrpcService>();
+                IGrpcService grpcService = sp.GetRequiredService<IGrpcService>();
                 o.Address = grpcService.Address;
             })
             .AddInterceptor<JwtInterceptor>();
+
+        services.AddSingleton<JwtInterceptor>();
 
         return services;
     }

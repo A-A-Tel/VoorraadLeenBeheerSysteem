@@ -11,11 +11,13 @@ public interface INavigationService
         where TModel : class;
 }
 
-public class NavigationService(MainWindowViewModel mainWindow, IViewModelFactory viewModelFactory) : INavigationService
+public class NavigationService(MainWindowViewModel mainWindow, IViewModelFactory viewModelFactory, ISmartCardService smartCardService) : INavigationService
 {
     public async Task NavigateToAsync<TViewModel>()
         where TViewModel : PageViewModelBase
     {
+        smartCardService.SetCardDetectedCallback(null);
+
         PageViewModelBase vm = viewModelFactory.Get<TViewModel>();
         await vm.LoadAsync();
 
@@ -26,6 +28,8 @@ public class NavigationService(MainWindowViewModel mainWindow, IViewModelFactory
         where TViewModel : PageViewModelBase<TModel>
         where TModel : class
     {
+        smartCardService.SetCardDetectedCallback(null);
+
         PageViewModelBase<TModel> vm = viewModelFactory.Get<TViewModel>();
         await vm.LoadAsync(model);
 

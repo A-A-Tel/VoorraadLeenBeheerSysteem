@@ -11,7 +11,7 @@ public interface ISmartCardService : IDisposable
 
     event Action<bool>? ReadersAvailableChanged;
 
-    void SetCardDetectedCallback(Func<byte[], bool> callback);
+    void SetCardDetectedCallback(Func<byte[], Task<bool>>? callback);
 
     void Start();
     void Stop();
@@ -54,7 +54,7 @@ public sealed class SmartCardService : ISmartCardService
     // -------------------------------------------------------------------------
     // Private state
     // -------------------------------------------------------------------------
-    private Func<byte[], bool>? _cardDetectedCallback;
+    private Func<byte[], Task<bool>>? _cardDetectedCallback;
 
     private CancellationTokenSource? _cts;
     private bool _disposed;
@@ -116,9 +116,9 @@ public sealed class SmartCardService : ISmartCardService
     ///     detected on any reader.  The <paramref name="callback" /> receives the raw
     ///     UID bytes returned by the card.
     /// </summary>
-    public void SetCardDetectedCallback(Func<byte[], bool> callback)
+    public void SetCardDetectedCallback(Func<byte[], Task<bool>>? callback)
     {
-        _cardDetectedCallback = callback ?? throw new ArgumentNullException(nameof(callback));
+        _cardDetectedCallback = callback;
     }
 
     /// <summary>
@@ -262,9 +262,15 @@ public sealed class SmartCardService : ISmartCardService
     {
         string? readerName = e.ReaderName;
         Console.WriteLine("[SmartCardService] Card inserted: " + readerName);
-        if (_cardDetectedCallback == null) return;
+        if (_cardDetectedCallback is null) return;
 
-        Task.Run(() =>
+        Func<byte[], Task<bool>> callback = Interlocked.CompareExchange(
+            ref _cardDetectedCallback,
+            null,
+            null
+            );
+
+        Task.Run(async () =>
         {
             byte[]? uid;
             try
@@ -281,12 +287,16 @@ public sealed class SmartCardService : ISmartCardService
             Console.Write($" - {string.Join(',', uid)}");
             try
             {
-                if (_cardDetectedCallback(uid)) _cardDetectedCallback = null;
+                if (await callback(uid)) Interlocked.CompareExchange(
+                    ref _cardDetectedCallback,
+                    null,
+                    callback
+                );
             }
             catch (Exception ex)
             {
                 Console.WriteLine(
-                    $"[SmartCardService] Error dispose callback from '{_cardDetectedCallback?.Method}': {ex.Message}");
+                    $"[SmartCardService] Error dispose callback from '{callback.Method}': {ex.Message}");
             }
         });
     }
@@ -358,17 +368,6 @@ public sealed class SmartCardService : ISmartCardService
     }
 
     // -------------------------------------------------------------------------
-    // Monitor exception handler
-    // -------------------------------------------------------------------------
-
-    private void OnMonitorException(object sender, PCSCException ex)
-    {
-        // A monitor exception usually means the reader was yanked out.
-        // The plug-watcher will clean it up on the next poll cycle.
-        Console.WriteLine($"[SmartCardService] Monitor exception ({ex.SCardError}): {ex.Message}");
-    }
-
-    // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
 
@@ -382,12 +381,23 @@ public sealed class SmartCardService : ISmartCardService
         catch (Exception ex)
         {
             Console.WriteLine($"[SmartCardService] Could not enumerate readers: {ex.Message}");
-            return Enumerable.Empty<string>();
+            return [];
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Monitor exception handler
+    // -------------------------------------------------------------------------
+    private static void OnMonitorException(object sender, PCSCException ex)
+    {
+        // A monitor exception usually means the reader was yanked out.
+        // The plug-watcher will clean it up on the next poll cycle.
+        Console.WriteLine($"[SmartCardService] Monitor exception ({ex.SCardError}): {ex.Message}");
     }
 
     private void ThrowIfDisposed()
     {
-        if (_disposed) throw new ObjectDisposedException(nameof(SmartCardService));
+        if (!_disposed) return;
+        throw new ObjectDisposedException(nameof(SmartCardService));
     }
 }
