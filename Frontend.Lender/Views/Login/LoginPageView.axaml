@@ -3,18 +3,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:login="clr-namespace:FrontendLender.ViewModels.Login"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
              Background="{StaticResource Background}"
              x:DataType="{x:Type login:LoginPageViewModel}"
              x:Class="FrontendLender.Views.Login.LoginPageView">
 
     <Grid HorizontalAlignment="Stretch" Margin="25">
-        <Border Width="425" Height="450" Padding="30" Background="{StaticResource Secondary}" CornerRadius="30"
+        <Border Width="425" Height="440" Padding="30" Background="{StaticResource Secondary}" CornerRadius="30"
                 BorderBrush="{StaticResource TextPrimary}" BorderThickness="3">
             <StackPanel Spacing="25">
-                <StackPanel Spacing="12">
-                    <TextBlock FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}"
-                               Text="{Binding Data?.Name}" />
+                <StackPanel Spacing="">
                     <TextBlock FontSize="16" Foreground="{StaticResource Divider}"
                                Text="Log in met je naam en wachtwoord." />
                 </StackPanel>
@@ -38,9 +36,14 @@
                     </TextBox>
                 </StackPanel>
                 <Button Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                        CornerRadius="10" Background="{StaticResource Background}">
+                        CornerRadius="10" Background="{StaticResource Primary}">
                     <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"
                                Text="Inloggen" />
+                </Button>
+                <Button Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        CornerRadius="10" Background="{StaticResource Divider}" Command="{Binding LoginCommand}">
+                    <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"
+                               Text="Annuleren" />
                 </Button>
             </StackPanel>
         </Border>

@@ -13,15 +13,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
         <PackageReference Include="Avalonia.Themes.Fluent"/>
         <PackageReference Include="Avalonia.Fonts.Inter"/>
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Google.Protobuf"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
-        <PackageReference Include="ReactiveUI.Avalonia"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Frontend.Shared\Frontend.Shared.csproj"/>
+    </ItemGroup>
 </Project>

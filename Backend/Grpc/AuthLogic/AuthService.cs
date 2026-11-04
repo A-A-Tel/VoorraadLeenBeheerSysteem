@@ -47,6 +47,7 @@ public class AuthService(
 
         PasswordVerificationResult verificationResult =
             passwordService.VerifyPassword(user, user.PasswordHash, request.Password);
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (verificationResult == PasswordVerificationResult.Failed)
             throw new ArgumentException("Incorrect credentials");
 
