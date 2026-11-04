@@ -3,7 +3,7 @@ using System.Text;
 using Backend.Database;
 using Backend.Extensions;
 using Backend.Grpc.Interceptors;
-using Backend.Grpc.UserLogic;
+using Backend.Grpc.Logic.UserLogic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 

@@ -283,8 +283,6 @@ public sealed class SmartCardService : ISmartCardService
                 Console.WriteLine($"[SmartCardService] Error reading UID from '{readerName}': {ex.Message}");
                 return;
             }
-
-            Console.Write($" - {string.Join(',', uid)}");
             try
             {
                 if (await callback(uid))

@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Protos.Auth;
 using Protos.Role;
 
-namespace Backend.Grpc.AuthLogic;
+namespace Backend.Grpc.Logic.AuthLogic;
 
 public interface IAuthService
 {
@@ -40,13 +40,13 @@ public class AuthService(
     {
         User? user = await repository.GetUserAsync(request.CardBytes.ToByteArray());
 
-        Console.WriteLine("Test");
         if (user is null or { Role.Id: RoleType.Borrower }) throw new KeyNotFoundException("Lender does not exist");
 
         if (user.PasswordHash is null) throw new ArgumentException("Lender does not have a password");
 
         PasswordVerificationResult verificationResult =
             passwordService.VerifyPassword(user, user.PasswordHash, request.Password);
+
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (verificationResult == PasswordVerificationResult.Failed)
             throw new ArgumentException("Incorrect credentials");

@@ -2,7 +2,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Protos.Auth;
 
-namespace Backend.Grpc.AuthLogic;
+namespace Backend.Grpc.Logic.AuthLogic;
 
 public class AuthController(IAuthService service) : Protos.Auth.AuthController.AuthControllerBase
 {

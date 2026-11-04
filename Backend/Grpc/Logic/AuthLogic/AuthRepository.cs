@@ -3,7 +3,7 @@ using Backend.Database.Entities;
 using Backend.Grpc.Universal;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Grpc.AuthLogic;
+namespace Backend.Grpc.Logic.AuthLogic;
 
 public interface IAuthRepository
 {

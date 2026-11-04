@@ -1,6 +1,6 @@
 using System.Reflection;
-using Backend.Grpc.AuthLogic;
-using Backend.Grpc.UserLogic;
+using Backend.Grpc.Logic.AuthLogic;
+using Backend.Grpc.Logic.UserLogic;
 using Grpc.Core;
 
 namespace Backend.Extensions;

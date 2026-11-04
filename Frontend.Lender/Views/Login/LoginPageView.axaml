@@ -36,12 +36,12 @@
                     </TextBox>
                 </StackPanel>
                 <Button Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                        CornerRadius="10" Background="{StaticResource Primary}">
+                        CornerRadius="10" Background="{StaticResource Primary}" Command="{Binding LoginCommand}">
                     <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"
                                Text="Inloggen" />
                 </Button>
                 <Button Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                        CornerRadius="10" Background="{StaticResource Divider}" Command="{Binding LoginCommand}">
+                        CornerRadius="10" Background="{StaticResource Divider}" Command="{Binding CancelCommand}">
                     <TextBlock FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"
                                Text="Annuleren" />
                 </Button>

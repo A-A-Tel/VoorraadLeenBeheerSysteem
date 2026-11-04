@@ -13,8 +13,10 @@ public interface IAuthService
     Task<string?> LenderLookup(byte[] cardBytes);
 }
 
-public class AuthService(AuthController.AuthControllerClient client, IGrpcService grpcService)
-    : IAuthService
+public class AuthService(
+    AuthController.AuthControllerClient client,
+    IGrpcService grpcService
+    ) : IAuthService
 {
     public bool ManagerLogin(string email, string password)
     {
@@ -32,6 +34,8 @@ public class AuthService(AuthController.AuthControllerClient client, IGrpcServic
         try
         {
             LoginResponse response = await client.LenderLoginAsync(request);
+            grpcService.JwtToken = response.Jwt;
+            return true;
         }
         catch (RpcException ex)
         {

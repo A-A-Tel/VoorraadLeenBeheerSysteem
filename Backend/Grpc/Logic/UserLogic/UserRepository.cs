@@ -1,4 +1,4 @@
-namespace Backend.Grpc.UserLogic;
+namespace Backend.Grpc.Logic.UserLogic;
 
 public interface IUserRepository { }
 

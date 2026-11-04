@@ -16,21 +16,29 @@ public class GrpcExceptionInterceptor : Interceptor
         }
         catch (KeyNotFoundException ex)
         {
+            Console.WriteLine(ex.Message);
+
             // HTTP 404
             throw new RpcException(new Status(StatusCode.NotFound, ex.Message));
         }
         catch (ArgumentException ex)
         {
+            Console.WriteLine(ex.Message);
+
             // HTTP 400
             throw new RpcException(new Status(StatusCode.InvalidArgument, ex.Message));
         }
         catch (UnauthorizedAccessException ex)
         {
+            Console.WriteLine(ex.Message);
+
             // HTTP 401
             throw new RpcException(new Status(StatusCode.Unauthenticated, ex.Message));
         }
-        catch (RpcException)
+        catch (RpcException ex)
         {
+            Console.WriteLine(ex.Message);
+
             throw;
         }
         catch (Exception ex)
