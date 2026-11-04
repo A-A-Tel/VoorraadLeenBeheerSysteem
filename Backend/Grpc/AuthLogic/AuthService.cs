@@ -10,10 +10,22 @@ using Protos.Role;
 
 namespace Backend.Grpc.AuthLogic;
 
-public class AuthService(IAuthRepository repository, IConfiguration configuration, IPasswordService passwordService)
+public interface IAuthService
+{
+    Task<LenderLookupResponse> GetLenderName(LenderLookupRequest request);
+    Task<LoginResponse> LoginAsync(LenderLoginRequest request);
+    Task<LoginResponse> LoginAsync(ManagerLoginRequest request);
+}
+
+public class AuthService(
+    IAuthRepository repository,
+    IConfiguration configuration,
+    IPasswordService passwordService
+    ) : IAuthService
 {
     public async Task<LenderLookupResponse> GetLenderName(LenderLookupRequest request)
     {
+
         User? user = await repository.GetUserAsync(request.CardBytes.ToByteArray());
 
         if (user is null or { Role.Id: RoleType.Borrower }) throw new KeyNotFoundException("Lender does not exist");
@@ -28,6 +40,7 @@ public class AuthService(IAuthRepository repository, IConfiguration configuratio
     {
         User? user = await repository.GetUserAsync(request.CardBytes.ToByteArray());
 
+        Console.WriteLine("Test");
         if (user is null or { Role.Id: RoleType.Borrower }) throw new KeyNotFoundException("Lender does not exist");
 
         if (user.PasswordHash is null) throw new ArgumentException("Lender does not have a password");

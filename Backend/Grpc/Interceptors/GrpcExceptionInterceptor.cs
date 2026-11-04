@@ -35,6 +35,8 @@ public class GrpcExceptionInterceptor : Interceptor
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
+
             // HTTP 500
             throw new RpcException(new Status(StatusCode.Internal,
                 "An internal server error occurred. Please try again later."));

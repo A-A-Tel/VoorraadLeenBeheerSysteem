@@ -1,5 +1,6 @@
 using FrontendShared.Interceptors;
 using FrontendShared.Services;
+using FrontendShared.Services.Grpc;
 using Microsoft.Extensions.DependencyInjection;
 using Protos.Auth;
 
@@ -33,6 +34,7 @@ public static class GrpcClientServiceExtensions
             })
             .AddInterceptor<JwtInterceptor>();
 
-        return services.AddSingleton<JwtInterceptor>();
+        return services
+            .AddSingleton<JwtInterceptor>();
     }
 }

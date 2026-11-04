@@ -2,18 +2,18 @@ using Google.Protobuf;
 using Grpc.Core;
 using Protos.Auth;
 
-namespace FrontendShared.Services;
+namespace FrontendShared.Services.Grpc;
 
 public interface IAuthService
 {
     bool ManagerLogin(string email, string password);
 
-    bool LenderLogin(byte[] cardBytes, string password);
+    Task<bool> LenderLogin(byte[] cardBytes, string password);
 
     Task<string?> LenderLookup(byte[] cardBytes);
 }
 
-public class AuthService(AuthController.AuthControllerClient client, INavigationService navigationService)
+public class AuthService(AuthController.AuthControllerClient client, IGrpcService grpcService)
     : IAuthService
 {
     public bool ManagerLogin(string email, string password)
@@ -21,8 +21,23 @@ public class AuthService(AuthController.AuthControllerClient client, INavigation
         return false;
     }
 
-    public bool LenderLogin(byte[] cardBytes, string password)
+    public async Task<bool> LenderLogin(byte[] cardBytes, string password)
     {
+        LenderLoginRequest request = new()
+        {
+            CardBytes = ByteString.CopyFrom(cardBytes),
+            Password = password
+        };
+
+        try
+        {
+            LoginResponse response = await client.LenderLoginAsync(request);
+        }
+        catch (RpcException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
         return false;
     }
 

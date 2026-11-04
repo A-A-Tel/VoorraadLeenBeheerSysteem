@@ -12,7 +12,9 @@ public interface IAuthRepository
     Task RehashPasswordAsync(User user, string password);
 }
 
-public class AuthRepository(AppDbContext database, IPasswordService passwordService)
+public class AuthRepository(
+    AppDbContext database, IPasswordService passwordService
+    ) : IAuthRepository
 {
     public async Task<User?> GetUserAsync(byte[] cardBytes)
     {

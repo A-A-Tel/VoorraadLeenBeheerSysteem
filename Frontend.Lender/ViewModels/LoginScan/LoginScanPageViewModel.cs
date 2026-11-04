@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using FrontendLender.Models.Login;
 using FrontendLender.ViewModels.Login;
 using FrontendShared.Services;
+using FrontendShared.Services.Grpc;
 using FrontendShared.ViewModels;
 
 namespace FrontendLender.ViewModels.LoginScan;

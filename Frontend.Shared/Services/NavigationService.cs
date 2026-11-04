@@ -6,7 +6,7 @@ public interface INavigationService
 {
     Task NavigateToAsync<TViewModel>() where TViewModel : PageViewModelBase;
 
-    Task NavigateToAsync<TViewModel, TModel>(TModel? model = null)
+    Task NavigateToAsync<TViewModel, TModel>(TModel model)
         where TViewModel : PageViewModelBase<TModel>
         where TModel : class;
 }
@@ -27,7 +27,7 @@ public class NavigationService(
         mainWindow.CurrentPage = vm;
     }
 
-    public async Task NavigateToAsync<TViewModel, TModel>(TModel? model = null)
+    public async Task NavigateToAsync<TViewModel, TModel>(TModel model)
         where TViewModel : PageViewModelBase<TModel>
         where TModel : class
     {

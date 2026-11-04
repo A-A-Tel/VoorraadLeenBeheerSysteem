@@ -1,4 +1,5 @@
 using FrontendShared.Services;
+using FrontendShared.Services.Grpc;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 

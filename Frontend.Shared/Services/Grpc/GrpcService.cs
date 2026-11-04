@@ -1,4 +1,4 @@
-namespace FrontendShared.Services;
+namespace FrontendShared.Services.Grpc;
 
 public interface IGrpcService
 {

@@ -51,7 +51,11 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddGrpc(options => { options.Interceptors.Add<GrpcExceptionInterceptor>(); });
+builder.Services.AddGrpc(options =>
+{
+    options.EnableDetailedErrors = true;
+    options.Interceptors.Add<GrpcExceptionInterceptor>();
+});
 builder.Services.AddApplicationServices(typeof(UserRepository).Assembly);
 
 #endregion

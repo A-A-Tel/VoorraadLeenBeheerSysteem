@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:login="clr-namespace:FrontendLender.ViewModels.Login"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Background="{StaticResource Background}"
+             x:DataType="{x:Type login:LoginPageViewModel}"
              x:Class="FrontendLender.Views.Login.LoginPageView">
 
     <Grid HorizontalAlignment="Stretch" Margin="25">
@@ -12,20 +14,20 @@
             <StackPanel Spacing="25">
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}"
-                               Text="Welkom [Naam]" />
+                               Text="{Binding Data?.Name}" />
                     <TextBlock FontSize="16" Foreground="{StaticResource Divider}"
                                Text="Log in met je naam en wachtwoord." />
                 </StackPanel>
                 <StackPanel Spacing="5">
                     <TextBlock FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextPrimary}" Text="Naam" />
-                    <TextBox Padding="15" FontSize="16" Text="Anouar" IsEnabled="False" CornerRadius="10"
+                    <TextBox Padding="15" FontSize="16" Text="{Binding Data.Name}" IsEnabled="False" CornerRadius="10"
                              BorderBrush="{StaticResource Divider}" BorderThickness="1" />
                 </StackPanel>
                 <StackPanel Spacing="5">
                     <TextBlock FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextPrimary}"
                                Text="Wachtwoord" />
                     <TextBox Name="PasswordField" PasswordChar="•" RevealPassword="False" Padding="15" FontSize="16"
-                             PlaceholderText="Vul je wachtwoord in" CornerRadius="10"
+                             PlaceholderText="Vul je wachtwoord in" CornerRadius="10" Text="{Binding Password}"
                              BorderBrush="{StaticResource Divider}" BorderThickness="1">
                         <TextBox.InnerRightContent>
                             <Button Click="PasswordVisibility" Margin="0,0,10,0" Padding="5, 5, 5, 5"
