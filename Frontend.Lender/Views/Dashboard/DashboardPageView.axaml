@@ -3,8 +3,90 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dashboard="clr-namespace:FrontendLender.ViewModels.Dashboard"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="600"
              x:DataType="{x:Type dashboard:DashboardPageViewModel}"
              x:Class="FrontendLender.Views.Dashboard.DashboardPageView">
-    <TextBlock Text="{Binding JwtToken}"></TextBlock>
+
+    <Grid HorizontalAlignment="Stretch" Margin="270,0,0,0" Background="{StaticResource Background}">
+            <Grid Margin="22"
+                  ColumnDefinitions="*,*,*"
+                  RowDefinitions="Auto,Auto"
+                  VerticalAlignment="Top">
+
+                <Border Grid.Row="0" Grid.Column="0"
+                        Background="{StaticResource Primary}" CornerRadius="16" Padding="18"
+                        Margin="0,0,20,20">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Width="60" Height="60" CornerRadius="4"
+                                Background="{StaticResource PrimaryLight}" VerticalAlignment="Center">
+                            <Svg Name="Icon1" Height="35" Width="35" Path="../../Assets/Icons/Box.svg" />
+                        </Border>
+                        <StackPanel>
+                            <TextBlock Text="Beschikbare producten"
+                                       Foreground="{StaticResource TextSecondary}" FontWeight="Bold" FontSize="20" />
+                            <TextBlock Text="24"
+                                       Foreground="{StaticResource TextSecondary}" FontSize="15" Margin="0,7,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1"
+                        Background="{StaticResource Primary}" CornerRadius="16" Padding="18"
+                        Margin="0,0,20,20">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Width="60" Height="60" CornerRadius="4"
+                                Background="{StaticResource PrimaryLight}" VerticalAlignment="Center">
+                            <Svg Name="Icon2" Height="35" Width="35" Path="../../Assets/Icons/recycle.svg" />
+                        </Border>
+                        <StackPanel>
+                            <TextBlock Text="Actieve leningen"
+                                       Foreground="{StaticResource TextSecondary}" FontWeight="Bold" FontSize="20" />
+                            <TextBlock Text="2"
+                                       Foreground="{StaticResource TextSecondary}" FontSize="15" Margin="0,7,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="2"
+                        Background="{StaticResource Primary}" CornerRadius="16" Padding="18"
+                        Margin="0,0,20,20">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Width="60" Height="60" CornerRadius="4"
+                                Background="{StaticResource PrimaryLight}" VerticalAlignment="Center">
+                            <Svg Name="Icon3" Height="35" Width="35" Path="../../Assets/Icons/Retoured.svg" />
+                        </Border>
+                        <StackPanel>
+                            <TextBlock Text="Geretourneerd"
+                                       Foreground="{StaticResource TextSecondary}" FontWeight="Bold" FontSize="20" />
+                            <TextBlock Text="1"
+                                       Foreground="{StaticResource TextSecondary}" FontSize="15" Margin="0,7,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                        Background="{StaticResource Primary}" CornerRadius="16" Padding="32"
+                        Height="214" Margin="0,0,11,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="Geleende producten"
+                                   Foreground="{StaticResource TextSecondary}" FontWeight="Bold" FontSize="20" />
+                        <TextBlock Grid.Row="1"
+                                   Text="Producten kunnen niet ingeladen worden....."
+                                   Foreground="{StaticResource PrimaryLight}" FontWeight="Bold" FontSize="15"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Margin="0,0,0,24" />
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="2"
+                        Background="{StaticResource Primary}" CornerRadius="16" Padding="16"
+                        Height="214" Margin="11,0,0,0">
+                    <TextBlock
+                               Text="PIECHART"
+                               Foreground="{StaticResource PrimaryLight}" FontWeight="Bold" FontSize="15"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Margin="0,0,0,24" />
+                </Border>
+            </Grid>
+    </Grid>
 </UserControl>

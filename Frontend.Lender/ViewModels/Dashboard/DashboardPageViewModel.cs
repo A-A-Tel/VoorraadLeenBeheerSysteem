@@ -16,7 +16,7 @@ public partial class DashboardPageViewModel(
     public override Task LoadAsync()
     {
         JwtToken = grpcService.JwtToken?? "No token";
-
         return Task.CompletedTask;
     }
+
 }
