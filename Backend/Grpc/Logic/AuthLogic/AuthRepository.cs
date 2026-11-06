@@ -1,0 +1,42 @@
+using Backend.Database;
+using Backend.Database.Entities;
+using Backend.Grpc.Universal;
+using Microsoft.EntityFrameworkCore;
+
+namespace Backend.Grpc.Logic.AuthLogic;
+
+public interface IAuthRepository
+{
+    Task<User?> GetUserAsync(byte[] cardBytes);
+    Task<User?> GetUserAsync(string email);
+    Task RehashPasswordAsync(User user, string password);
+}
+
+public class AuthRepository(
+    AppDbContext database, IPasswordService passwordService
+    ) : IAuthRepository
+{
+    public async Task<User?> GetUserAsync(byte[] cardBytes)
+    {
+        return await database.Users
+            .Where(u => u.CardBytes == cardBytes)
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<User?> GetUserAsync(string email)
+    {
+        return await database.Users
+            .Where(u => u.Email == email)
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task RehashPasswordAsync(User user, string password)
+    {
+        user.PasswordHash = passwordService.HashPassword(password, user);
+
+        database.Users.Update(user);
+        await database.SaveChangesAsync();
+    }
+}

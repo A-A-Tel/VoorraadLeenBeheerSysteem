@@ -8,11 +8,29 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
 
         <Protobuf Include="..\Protos\**\*.proto"
                   Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"
                   GrpcServices="Client"
         />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Grpc.AspNetCore"/>
+        <PackageReference Include="Grpc.Net.Client"/>
+        <PackageReference Include="Grpc.Tools">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="PCSC"/>
+        <PackageReference Include="ReactiveUI.Avalonia"/>
     </ItemGroup>
 
 </Project>

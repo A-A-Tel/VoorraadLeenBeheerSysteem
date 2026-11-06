@@ -7,10 +7,12 @@ import "dto.proto";
 
 message UserDto {
   uint64 id = 1;
-  optional bytes card_bytes = 2;
-  string name = 3;
-  string email = 4;
-  role.RoleDto role = 5;
+  role.RoleType role = 2;
+  role.TitleType title = 3;
+  optional bytes card_bytes = 4;
+  string name = 5;
+  string email = 6;
+  string number = 7;
 }
 
 enum UserSortBy {
@@ -85,5 +87,5 @@ message UserDeleteRequest {
 }
 
 message UserDeleteResponse {
-  
+
 }

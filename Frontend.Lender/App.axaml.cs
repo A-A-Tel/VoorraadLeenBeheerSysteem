@@ -1,9 +1,12 @@
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using FrontendLender.Services;
-using FrontendLender.ViewModels;
-using FrontendLender.Views;
+using FrontendLender.ViewModels.LoginScan;
+using FrontendShared.Extensions;
+using FrontendShared.Services;
+using FrontendShared.ViewModels;
+using FrontendShared.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontendLender;
@@ -18,13 +21,17 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         ServiceCollection serviceCollection = new();
+        Assembly assembly = GetType().Assembly;
 
-        serviceCollection.AddCommonServices();
+        serviceCollection
+            .AddViewModels(assembly)
+            .AddApplicationServices()
+            .AddGrpcClients();
 
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         MainWindowViewModel main = services.GetRequiredService<MainWindowViewModel>();
         INavigationService navigation = services.GetRequiredService<INavigationService>();
-        // navigation.NavigateTo<PAGE_NAME>().Wait();
+        navigation.NavigateToAsync<LoginScanPageViewModel>().GetAwaiter().GetResult();
 
         switch (ApplicationLifetime)
         {

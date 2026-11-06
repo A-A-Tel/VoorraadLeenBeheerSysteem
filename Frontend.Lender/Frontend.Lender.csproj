@@ -13,35 +13,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
         <PackageReference Include="Avalonia.Themes.Fluent"/>
         <PackageReference Include="Avalonia.Fonts.Inter"/>
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia.Diagnostics">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Google.Protobuf"/>
-        <PackageReference Include="Grpc.Net.Client"/>
-        <PackageReference Include="Grpc.Tools">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
-        <PackageReference Include="PCSC"/>
-        <PackageReference Include="PCSC.Iso7816"/>
-        <PackageReference Include="PCSC.Reactive"/>
-        <PackageReference Include="ReactiveUI.Avalonia"/>
         <PackageReference Include="Svg.Controls.Skia.Avalonia"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Views\MainWindowView.axaml.cs">
-            <DependentUpon>MainWindow.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Views\Product\ProductFormView.axaml.cs">
             <DependentUpon>ProductFormView.axaml</DependentUpon>
             <SubType>Code</SubType>
@@ -90,20 +68,24 @@
             <DependentUpon>UserPageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Scanner\ScanPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>LoginPageView.axaml</DependentUpon>
+        <Compile Update="Views\Scanner\LoginScanPageView.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>LoginPageView.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Login\LoginPageView.axaml.cs">
-          <SubType>Code</SubType>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Login\ScanPageView.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>ScanPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>ScanPageView.axaml</DependentUpon>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Login\LoginPageView.axaml" />
+        <AdditionalFiles Include="Views\Login\LoginPageView.axaml"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Frontend.Shared\Frontend.Shared.csproj"/>
     </ItemGroup>
 </Project>
