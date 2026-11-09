@@ -16,7 +16,7 @@ public class Note : ISoftDeletable
 
     // Navigation properties
 
-    public User? Writer { get; set; } = null!;
+    public User? Writer { get; set; }
 
     public ICollection<UserNote> UserNotes { get; set; } = [];
     public ICollection<ProductNote> ProductNotes { get; set; } = [];

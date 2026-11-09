@@ -22,7 +22,6 @@ public class AppDbContext : DbContext
     public DbSet<Title> Titles { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Note> Notes { get; set; }
-    public DbSet<Log> Logs { get; set; }
     public DbSet<Loan> Loans { get; set; }
     public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
@@ -75,18 +74,6 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Foreign Keys
-
-        builder.Entity<Log>()
-            .HasOne(x => x.Invoker)
-            .WithMany(x => x.InvokedLogs)
-            .HasForeignKey(y => y.InvokerId)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder.Entity<Log>()
-            .HasOne(x => x.Target)
-            .WithMany(x => x.TargetLogs)
-            .HasForeignKey(y => y.TargetId)
-            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Loan>()
             .HasOne(x => x.Lender)
@@ -175,11 +162,6 @@ public class AppDbContext : DbContext
             builder.Entity<Product>()
                 .Property(x => x.UpdatedAt)
         );
-
-        builder.Entity<Log>()
-            .Property(x => x.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql(CurrentDatetimeSyntax);
 
         builder.Entity<LoanProduct>()
             .Property(x => x.CreatedAt)

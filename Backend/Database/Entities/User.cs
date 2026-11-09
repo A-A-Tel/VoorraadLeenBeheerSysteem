@@ -34,8 +34,6 @@ public class User : ISoftDeletable
     public Role Role { get; set; } = null!;
     public Title Title { get; set; } = null!;
 
-    public ICollection<Log> InvokedLogs { get; set; } = [];
-    public ICollection<Log> TargetLogs { get; set; } = [];
     public ICollection<Note> Notes { get; set; } = [];
     public ICollection<Loan> LentLoans { get; set; } = [];
     public ICollection<Loan> BorrowedLoans { get; set; } = [];

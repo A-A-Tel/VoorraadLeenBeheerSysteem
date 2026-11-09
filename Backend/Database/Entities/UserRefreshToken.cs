@@ -13,7 +13,7 @@ public class UserRefreshToken
 
     [MaxLength(64)] public string? CreatedByIp { get; set; } = null!;
 
-    public string? ReplacedByToken { get; set; }
+    [MaxLength(1024)] public string? ReplacedByToken { get; set; }
 
     public bool IsRevoked { get; set; }
 
@@ -26,7 +26,7 @@ public class UserRefreshToken
 
     public User User { get; set; } = null!;
 
-    // Helper Properties
+    // Computed helper Properties
 
     public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
     public bool IsActive => !IsExpired && !IsRevoked;
