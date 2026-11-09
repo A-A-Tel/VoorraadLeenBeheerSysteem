@@ -1,0 +1,51 @@
+@startuml
+
+namespace Backend {
+
+    namespace Database {
+
+        namespace Entities {
+
+            namespace Junctions {
+
+            }
+
+        }
+
+    }
+
+    namespace Extensions {
+
+    }
+
+    namespace Grpc {
+
+        namespace Interceptors {
+
+        }
+
+        namespace Logic {
+
+            namespace AuthLogic {
+
+            }
+
+            namespace ProductLogic {
+
+            }
+
+            namespace UserLogic {
+
+            }
+
+        }
+
+        namespace Universal {
+
+        }
+
+    }
+
+}
+
+@enduml
