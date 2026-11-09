@@ -13,7 +13,8 @@ public interface IAuthRepository
 }
 
 public class AuthRepository(
-    AppDbContext database, IPasswordService passwordService
+    AppDbContext database,
+    IPasswordService passwordService
     ) : IAuthRepository
 {
     public async Task<User?> GetUserAsync(byte[] cardBytes)
