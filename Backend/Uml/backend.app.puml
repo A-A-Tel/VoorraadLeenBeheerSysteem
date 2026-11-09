@@ -70,14 +70,88 @@ package Backend {
 
             package LoanLogic {
 
+                interface ILoanRepository {
+
+                }
+                Backend.App.Logic.LoanLogic.ILoanRepository <|-down- Backend.App.Logic.LoanLogic.LoanRepository
+                class LoanRepository {
+
+                }
+
+                interface ILoanService {
+
+                }
+                Backend.App.Logic.LoanLogic.ILoanService <|-down- Backend.App.Logic.LoanLogic.LoanService
+                class LoanService {
+
+                }
+
+                abstract LoanControllerBase <<Protos.Loan.LoanController>>
+                Backend.App.Logic.LoanLogic.LoanControllerBase <|-down- Backend.App.Logic.LoanLogic.LoanController
+                class LoanController {
+
+                }
+
+                Backend.App.Logic.LoanLogic.ILoanRepository <|.. Backend.App.Logic.LoanLogic.LoanService
+                Backend.App.Logic.LoanLogic.ILoanService <|.. Backend.App.Logic.LoanLogic.LoanController
+
             }
 
             package ProductLogic {
+
+                interface IProductRepository {
+
+                }
+                Backend.App.Logic.ProductLogic.IProductRepository <|-down- Backend.App.Logic.ProductLogic.ProductRepository
+                class ProductRepository {
+
+                }
+
+                interface IProductService {
+
+                }
+                Backend.App.Logic.ProductLogic.IProductService <|-down- Backend.App.Logic.ProductLogic.ProductService
+                class ProductService {
+
+                }
+
+                abstract ProductControllerBase <<Protos.Product.ProductController>>
+                Backend.App.Logic.ProductLogic.ProductControllerBase <|-down- Backend.App.Logic.ProductLogic.ProductController
+                class ProductController {
+
+                }
+
+                Backend.App.Logic.ProductLogic.IProductRepository <|.. Backend.App.Logic.ProductLogic.ProductService
+                Backend.App.Logic.ProductLogic.IProductService <|.. Backend.App.Logic.ProductLogic.ProductController
 
             }
 
             package UserLogic {
 
+                interface IUserRepository {
+
+                }
+                Backend.App.Logic.UserLogic.IUserRepository <|-down- Backend.App.Logic.UserLogic.UserRepository
+                class UserRepository {
+
+                }
+
+                interface IUserService {
+
+                }
+                Backend.App.Logic.UserLogic.IUserService <|-down- Backend.App.Logic.UserLogic.UserService
+                class UserService {
+
+                }
+
+                abstract UserControllerBase <<Protos.User.UserController>>
+                Backend.App.Logic.UserLogic.UserControllerBase <|-down- Backend.App.Logic.UserLogic.UserController
+                class UserController {
+
+                }
+
+                Backend.App.Logic.UserLogic.IUserRepository <|.. Backend.App.Logic.UserLogic.UserService
+                Backend.App.Logic.UserLogic.IUserService <|.. Backend.App.Logic.UserLogic.UserController
             }
 
         }
