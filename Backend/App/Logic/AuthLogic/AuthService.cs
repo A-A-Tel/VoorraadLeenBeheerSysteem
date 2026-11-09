@@ -1,14 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Backend.App.Global;
 using Backend.Database.Entities;
-using Backend.Grpc.Universal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Protos.Auth;
 using Protos.Role;
 
-namespace Backend.Grpc.Logic.AuthLogic;
+namespace Backend.App.Logic.AuthLogic;
 
 public interface IAuthService
 {

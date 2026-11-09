@@ -1,7 +1,7 @@
 using Backend.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Backend.App.Universal;
+namespace Backend.App.Global;
 
 public interface IPasswordService
 {

@@ -1,9 +1,8 @@
-using System.Reflection;
 using System.Text;
 using Backend.Database;
 using Backend.Extensions;
-using Backend.Grpc.Interceptors;
-using Backend.Grpc.Logic.UserLogic;
+using Backend.App.Interceptors;
+using Backend.App.Logic.UserLogic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -90,7 +89,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGrpcControllers(Assembly.GetExecutingAssembly());
+app.MapGrpcControllers();
 
 app.Run();
 

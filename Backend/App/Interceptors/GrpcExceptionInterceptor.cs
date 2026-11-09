@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Backend.Grpc.Interceptors;
+namespace Backend.App.Interceptors;
 
 public class GrpcExceptionInterceptor : Interceptor
 {

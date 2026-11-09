@@ -1,13 +1,12 @@
 using System.Reflection;
-using Backend.Grpc.Logic.AuthLogic;
-using Backend.Grpc.Logic.UserLogic;
-using Grpc.Core;
+using Backend.App.Logic.AuthLogic;
+using Backend.App.Logic.UserLogic;
 
 namespace Backend.Extensions;
 
 public static class GrpcServiceExtensions
 {
-    public static IEndpointRouteBuilder MapGrpcControllers(this IEndpointRouteBuilder builder, Assembly assembly)
+    public static IEndpointRouteBuilder MapGrpcControllers(this IEndpointRouteBuilder builder)
     {
         builder.MapGrpcService<AuthController>();
         builder.MapGrpcService<UserController>();

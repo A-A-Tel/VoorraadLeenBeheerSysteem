@@ -1,4 +1,4 @@
-namespace Backend.Grpc.Logic.UserLogic;
+namespace Backend.App.Logic.UserLogic;
 
 public interface IUserService { }
 

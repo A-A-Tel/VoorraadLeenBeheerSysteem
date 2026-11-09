@@ -1,9 +1,9 @@
+using Backend.App.Global;
 using Backend.Database;
 using Backend.Database.Entities;
-using Backend.Grpc.Universal;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Grpc.Logic.AuthLogic;
+namespace Backend.App.Logic.AuthLogic;
 
 public interface IAuthRepository
 {
