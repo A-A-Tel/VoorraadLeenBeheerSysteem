@@ -1,0 +1,243 @@
+@startuml
+
+!pragma layout elk
+
+package Protos {
+
+  package Auth {
+    class ManagerLoginRequest {
+      +Email : string
+      +Password : string
+    }
+
+    class LenderLoginRequest {
+      +CardBytes : ByteString
+      +Password : string
+    }
+
+    class LoginResponse {
+      +Jwt : string
+    }
+
+    class LenderLookupRequest {
+      +CardBytes : ByteString
+    }
+
+    class LenderLookupResponse {
+      +Name : string
+    }
+  }
+
+  package Dto {
+    class Timestamp {
+      +Seconds : long
+      +Nanos : int
+    }
+
+    enum SortOrder {
+      Ascending
+      Descending
+    }
+  }
+
+  package Role {
+    enum RoleType {
+      Borrower
+      Lender
+      Manager
+    }
+
+    enum TitleType {
+      Student
+      Teacher
+    }
+  }
+
+  package Product {
+    class ProductDto {
+      +Id : ulong
+      +Title : TitleType
+      +Name : string
+      +Description : string
+      +Amount : int
+      +ImageId : string?
+    }
+
+    class ImageDto {
+      +Id : string
+      +Bytes : ByteString
+    }
+
+    enum RoleSortBy {
+      Name
+      Description
+      Amount
+    }
+
+    class ProductSearch {
+      +Name : string?
+      +Description : string?
+      +SortOrder : SortOrder?
+      +SortBy : RoleSortBy?
+    }
+
+    class ProductListRequest
+    class ProductListResponse
+    class ProductGetRequest {
+      +Id : ulong
+    }
+    class ProductGetResponse
+
+    class ProductCreateRequest {
+      +Name : string
+      +Description : string
+      +Amount : int
+    }
+    class ProductCreateResponse
+
+    class ProductUpdateRequest {
+      +Id : ulong
+      +Name : string?
+      +Description : string?
+      +Amount : int?
+    }
+    class ProductUpdateResponse
+
+    class ProductDeleteRequest {
+      +Id : ulong
+    }
+    class ProductDeleteResponse
+
+    class ProductImageGetRequest {
+      +ImageId : string
+    }
+    class ProductImageGetResponse
+
+    class ProductImageCreateRequest {
+      +Bytes : ByteString
+    }
+    class ProductImageCreateResponse {
+      +ImageId : string
+    }
+
+    class ProductImageUpdateRequest {
+      +ImageId : string
+      +Bytes : ByteString
+    }
+    class ProductImageUpdateResponse {
+      +ImageId : string
+    }
+
+    class ProductImageDeleteRequest {
+      +ImageId : string
+    }
+    class ProductImageDeleteResponse
+  }
+
+  package User {
+    class UserDto {
+      +Id : ulong
+      +Role : RoleType
+      +Title : TitleType
+      +CardBytes : ByteString?
+      +Name : string
+      +Email : string
+      +Number : string
+    }
+
+    enum UserSortBy {
+      Name
+      Email
+      Number
+    }
+
+    class UserSearch {
+      +Name : string?
+      +Email : string?
+      +Number : string?
+      +SortOrder : SortOrder?
+      +SortBy : UserSortBy?
+    }
+
+    class UserListRequest
+    class UserListResponse
+    class UserGetRequest {
+      +Id : ulong
+    }
+    class UserGetResponse
+
+    class UserCreateRequest {
+      +CardBytes : ByteString?
+      +Name : string
+      +Email : string
+      +Number : uint
+      +RoleId : ulong
+      +GeneratePassword : bool
+    }
+    class UserCreateResponse {
+      +GeneratedPassword : string?
+    }
+
+    class UserUpdateRequest {
+      +Id : ulong
+      +CardBytes : ByteString?
+      +Name : string?
+      +Email : string?
+      +Number : uint?
+      +RoleId : ulong?
+      +GeneratePassword : bool
+    }
+    class UserUpdateResponse {
+      +GeneratedPassword : string?
+    }
+
+    class UserDeleteRequest {
+      +Id : ulong
+    }
+    class UserDeleteResponse
+  }
+
+}
+
+' ---------- Product relations ----------
+Protos.Product.ProductDto -up-> Protos.Role.TitleType : Title
+Protos.Product.ProductSearch -up-> Protos.Dto.SortOrder : SortOrder
+Protos.Product.ProductSearch --> Protos.Product.RoleSortBy : SortBy
+
+Protos.Product.ProductListRequest --> "0..1" Protos.Product.ProductSearch : Search
+Protos.Product.ProductListResponse *-- "0..*" Protos.Product.ProductDto : Products
+Protos.Product.ProductGetResponse --> "1" Protos.Product.ProductDto : Product
+Protos.Product.ProductCreateResponse --> "1" Protos.Product.ProductDto : Product
+Protos.Product.ProductUpdateResponse --> "1" Protos.Product.ProductDto : Product
+Protos.Product.ProductImageGetResponse --> "1" Protos.Product.ImageDto : Image
+
+' ---------- User relations ----------
+Protos.User.UserDto -up-> Protos.Role.RoleType : Role
+Protos.User.UserDto -up-> Protos.Role.TitleType : Title
+Protos.User.UserSearch -up-> Protos.Dto.SortOrder : SortOrder
+Protos.User.UserSearch --> Protos.User.UserSortBy : SortBy
+
+Protos.User.UserListRequest --> "0..1" Protos.User.UserSearch : Search
+Protos.User.UserListResponse *-- "0..*" Protos.User.UserDto : Users
+Protos.User.UserGetResponse --> "1" Protos.User.UserDto : User
+Protos.User.UserCreateResponse --> "1" Protos.User.UserDto : User
+Protos.User.UserUpdateResponse --> "1" Protos.User.UserDto : User
+
+' ---------- Layout: request above its response ----------
+Protos.Product.ProductListRequest -[hidden]down-> Protos.Product.ProductListResponse
+Protos.Product.ProductGetRequest -[hidden]down-> Protos.Product.ProductGetResponse
+Protos.Product.ProductCreateRequest -[hidden]down-> Protos.Product.ProductCreateResponse
+Protos.Product.ProductUpdateRequest -[hidden]down-> Protos.Product.ProductUpdateResponse
+Protos.Product.ProductDeleteRequest -[hidden]down-> Protos.Product.ProductDeleteResponse
+Protos.Product.ProductImageGetRequest -[hidden]down-> Protos.Product.ProductImageGetResponse
+Protos.Product.ProductImageCreateRequest -[hidden]down-> Protos.Product.ProductImageCreateResponse
+Protos.Product.ProductImageUpdateRequest -[hidden]down-> Protos.Product.ProductImageUpdateResponse
+Protos.Product.ProductImageDeleteRequest -[hidden]down-> Protos.Product.ProductImageDeleteResponse
+
+Protos.User.UserListRequest -[hidden]down-> Protos.User.UserListResponse
+Protos.User.UserGetRequest -[hidden]down-> Protos.User.UserGetResponse
+Protos.User.UserCreateRequest -[hidden]down-> Protos.User.UserCreateResponse
+Protos.User.UserUpdateRequest -[hidden]down-> Protos.User.UserUpdateResponse
+Protos.User.UserDeleteRequest -[hidden]down-> Protos.User.UserDeleteResponse
+
+@enduml
