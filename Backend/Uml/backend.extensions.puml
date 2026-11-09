@@ -1,0 +1,14 @@
+@startuml
+!pragma layout elk
+
+package Backend {
+
+    package Extensions {
+        class GrpcServiceExtensions <<static>> {
+            + MapGrpcControllers(builder: this IEndpointRouteBuilder): IEndpointRouteBuilder {static}
+            + AddApplicationServices(builder: this IServiceCollection, assembly: Assembly): IServiceCollection {static}
+        }
+    }
+}
+
+@enduml

@@ -1,0 +1,243 @@
+@startuml
+!pragma layout elk
+
+package Backend {
+
+    package Database {
+
+        package Entities {
+
+            package Junctions {
+
+                class LoanProduct {
+                    + LoanId: ulong
+                    + ProductId: ulong
+                    + Amount: int
+                    + CreatedAt: DateTime
+                    + UpdatedAt: DateTime
+
+                    ' Navigation properties
+                    + Loan: Loan
+                    + Product: Product
+                }
+
+                class ProductNote {
+                    + ProductId: ulong
+                    + NoteId: ulong
+                    + CreatedAt: DateTime
+
+                    ' Navigation properties
+                    + Product: Product
+                    + Note: Note
+                }
+
+                class UserNote {
+                    + UserId: ulong
+                    + NoteId: ulong
+                    + CreatedAt: DateTime
+
+                    ' Navigation properties
+                    + User: User
+                    + Note: Note
+                }
+            }
+
+            interface IEntity {
+                + Id: ulong
+                + CreatedAt: DateTime
+                + UpdatedAt: DateTime
+            }
+
+            interface ISoftDeletable {
+                + IsDeleted: bool
+                + DeletedAt: DateTime?
+            }
+
+            class AuditLog {
+                + Id: ulong
+                + EventType: string
+                + UserName: string?
+                + CreatedDate: DateTime
+                + AuditData: JsonDocument
+            }
+
+            class Loan {
+                + LenderId: ulong?
+                + BorrowerId: ulong?
+                + DueAt: DateOnly
+                + ReturnedAt: DateTime?
+
+                ' Navigation properties
+                + Lender: User?
+                + Borrower: User?
+                + LoanProducts: ICollection<LoanProduct>
+            }
+
+            class Note {
+                + WriterId: ulong?
+                + Content: string
+
+                ' Navigation properties
+                + Writer: User?
+                + UserNotes: ICollection<UserNote>
+                + ProductNotes: ICollection<ProductNote>
+            }
+
+            class Product {
+                + TitleId: TitleType
+                + Name: string
+                + Description: string
+                + Amount: int
+                + ImageId: string?
+
+                ' Navigation properties
+                + Title: Title
+                + LoanProducts: ICollection<LoanProduct>
+                + ProductNotes: ICollection<ProductNote>
+            }
+
+            class Role {
+                + Id: RoleType
+
+                ' Navigation properties
+                + Users: ICollection<User>
+            }
+
+            class Title {
+                + Id: TitleType
+
+                ' Navigation properties
+                + Users: ICollection<User>
+                + Products: ICollection<Product>
+            }
+
+            class User {
+                + RoleId: RoleType
+                + TitleId: TitleType
+                + CardBytes: byte[]?
+                + Name: string
+                + Email: string
+                + Number: string
+                + PasswordHash: string?
+
+                ' Navigation properties
+                + Role: Role
+                + Title: Title
+                + Notes: ICollection<Note>
+                + LentLoans: ICollection<Loan>
+                + BorrowedLoans: ICollection<Loan>
+                + UserNotes: ICollection<UserNote>
+                + RefreshTokens: ICollection<UserRefreshToken>
+            }
+
+            class UserRefreshToken {
+                + UserId: ulong
+                + Token: string
+                + CreatedByIp: string?
+                + ReplacedByToken: string?
+                + IsRevoked: bool
+
+                ' Navigation properties
+                + User: User
+
+                ' Computed helper properties
+                + IsExpired: bool
+                + IsActive: bool
+            }
+
+        }
+
+        abstract DbContext <<Microsoft.EntityFrameworkCore>>
+
+        class AppDbContext {
+            # CurrentDatetimeSyntax: string <<virtual>>
+            # AuditLogDataColumnType: string <<virtual>>
+            # UserCardBytesColumnType: string <<virtual>>
+
+            ' Plain data tables
+            + Users: DbSet<User>
+            + Roles: DbSet<Role>
+            + Titles: DbSet<Title>
+            + Products: DbSet<Product>
+            + Notes: DbSet<Note>
+            + Loans: DbSet<Loan>
+            + UserRefreshTokens: DbSet<UserRefreshToken>
+
+            ' Junctions
+            + LoanProducts: DbSet<LoanProduct>
+            + ProductNotes: DbSet<ProductNote>
+            + UserNotes: DbSet<UserNote>
+
+            ' Third party requirements
+            + AuditLogs: DbSet<AuditLog>
+
+            # OnModelCreating(builder: ModelBuilder): void <<override>>
+            # OnConfiguring(options: DbContextOptionsBuilder): void <<override>>
+            # UpdatedAtColumn<TProperty>(builder: PropertyBuilder<TProperty>): void
+
+            ' Helpers
+            - GetEnv(key: string): string {static}
+            - GetEnvIntUnsigned(key: string): uint {static}
+            - ConvertFilterExpression(type: Type): LambdaExpression {static}
+        }
+
+        class DevelopmentDbContext {
+            # CurrentDatetimeSyntax: string <<override>>
+            # AuditLogDataColumnType: string <<override>>
+            # UserCardBytesColumnType: string <<override>>
+
+            # OnModelCreating(builder: ModelBuilder): void <<override>>
+            # OnConfiguring(options: DbContextOptionsBuilder): void <<override>>
+            # UpdatedAtColumn<TProperty>(builder: PropertyBuilder<TProperty>): void <<override>>
+        }
+    }
+}
+
+' ---------- Interface implementations ----------
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Loan
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Note
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Product
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.User
+
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Loan
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Note
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Product
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.User
+
+' ---------- Entity relations ----------
+Backend.Database.Entities.Loan "1" <-- "*" Backend.Database.Entities.Junctions.LoanProduct : Loan / LoanProducts
+
+Backend.Database.Entities.Note "1" <-- "*" Backend.Database.Entities.Junctions.ProductNote : Note / ProductNotes
+Backend.Database.Entities.Note "1" <-- "*" Backend.Database.Entities.Junctions.UserNote : Note / UserNotes
+
+Backend.Database.Entities.Product "1" <-- "*" Backend.Database.Entities.Junctions.LoanProduct : Product / LoanProducts
+Backend.Database.Entities.Product "1" <-- "*" Backend.Database.Entities.Junctions.ProductNote : Product / ProductNotes
+
+Backend.Database.Entities.Role "1" <-- "*" Backend.Database.Entities.User : Role
+
+Backend.Database.Entities.Title "1" <-- "*" Backend.Database.Entities.User : Title
+Backend.Database.Entities.Title "1" <-- "*" Backend.Database.Entities.Product : Title
+
+Backend.Database.Entities.User "1" <-- "*" Backend.Database.Entities.UserRefreshToken : User / RefreshTokens
+Backend.Database.Entities.User "0..1" <-- "*" Backend.Database.Entities.Note : Writer / Notes
+Backend.Database.Entities.User "0..1" <-- "*" Backend.Database.Entities.Loan : Lender / LentLoans
+Backend.Database.Entities.User "0..1" <-- "*" Backend.Database.Entities.Loan : Borrower / BorrowedLoans
+Backend.Database.Entities.User "1" <-- "*" Backend.Database.Entities.Junctions.UserNote : User / UserNotes
+
+' ---------- DbContext relations ----------
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.User : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Role : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Title : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Product : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Note : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Loan : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.UserRefreshToken : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Junctions.LoanProduct : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Junctions.ProductNote : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.Junctions.UserNote : <<use>>
+Backend.Database.AppDbContext .down.> Backend.Database.Entities.AuditLog : <<use>>
+
+Backend.Database.DevelopmentDbContext -down-|> Backend.Database.AppDbContext
+Backend.Database.AppDbContext -down-|> Backend.Database.DbContext
+
+@enduml
