@@ -9,10 +9,21 @@ package Backend {
 
         package Global {
 
+            interface IPasswordService {
+                + HashPassword(password: string, user: User?): string
+                + VerifyPassword(user: User, hashedPassword: string, providedPassword: string): PasswordVerificationResult
+            }
+            Backend.App.Global.IPasswordService <|-down- Backend.App.Global.PasswordService
+            class PasswordService {
+                - _passwordHasher: PasswordHasher<User>
+
+            }
         }
 
         package Interceptors {
-
+            class GrpcExceptionInterceptor {
+                + UnaryServerHandler<TRequest, TResponse>(...): Task<TResponse> <<override>>
+            }
         }
 
         package Logic {
@@ -233,15 +244,15 @@ package Backend {
 }
 
 ' ---------- Interface implementations ----------
-Backend.Database.Entities.IEntity <|.up. Backend.Database.Entities.Loan
-Backend.Database.Entities.IEntity <|.up. Backend.Database.Entities.Note
-Backend.Database.Entities.IEntity <|.up. Backend.Database.Entities.Product
-Backend.Database.Entities.IEntity <|.up. Backend.Database.Entities.User
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Loan
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Note
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.Product
+Backend.Database.Entities.IEntity <|.right. Backend.Database.Entities.User
 
-Backend.Database.Entities.ISoftDeletable <|.up. Backend.Database.Entities.Loan
-Backend.Database.Entities.ISoftDeletable <|.up. Backend.Database.Entities.Note
-Backend.Database.Entities.ISoftDeletable <|.up. Backend.Database.Entities.Product
-Backend.Database.Entities.ISoftDeletable <|.up. Backend.Database.Entities.User
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Loan
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Note
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.Product
+Backend.Database.Entities.ISoftDeletable <|.right. Backend.Database.Entities.User
 
 ' ---------- Entity relations ----------
 Backend.Database.Entities.Loan "1" <-- "*" Backend.Database.Entities.Junctions.LoanProduct : Loan / LoanProducts
