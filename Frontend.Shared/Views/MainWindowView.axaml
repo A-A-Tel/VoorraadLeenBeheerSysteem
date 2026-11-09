@@ -4,13 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Background="MediumPurple"
+        Background="#6250A3"
         x:Class="FrontendShared.Views.MainWindowView"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="productoverzicht">
 
-    <ScrollViewer>
-        <ContentControl Content="{Binding CurrentPage}" />
-    </ScrollViewer>
+    <Grid Name="MainGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+          RowDefinitions="*" ColumnDefinitions="270,*">
+        <ContentControl Name="Sidebar" Grid.Column="0" Content="{Binding Sidebar}"/>
+        <ScrollViewer Grid.Column="1">
+            <ContentControl Content="{Binding CurrentPage}" />
+        </ScrollViewer>
+    </Grid>
 </Window>

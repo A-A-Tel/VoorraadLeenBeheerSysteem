@@ -1,3 +1,6 @@
+using FrontendShared.ViewModels;
+using ReactiveUI.SourceGenerators;
+
 namespace FrontendShared.Services.Grpc;
 
 public interface IGrpcService
@@ -7,9 +10,10 @@ public interface IGrpcService
     string? JwtToken { get; set; }
 }
 
-public class GrpcService : IGrpcService
+public partial class GrpcService : ViewModelBase, IGrpcService
 {
     public Uri Address { get; set; } = new("http://localhost:8080");
 
-    public string? JwtToken { get; set; }
+    [Reactive]
+    public partial string? JwtToken { get; set; }
 }

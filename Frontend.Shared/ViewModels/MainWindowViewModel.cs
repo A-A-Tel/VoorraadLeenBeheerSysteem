@@ -1,12 +1,17 @@
-using ReactiveUI;
+using FrontendShared.Services.Grpc;
+using FrontendShared.ViewModels.Sidebar;
+using ReactiveUI.SourceGenerators;
 
 namespace FrontendShared.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel(
+    IGrpcService grpcService
+    ) : ViewModelBase
 {
-    public ViewModelBase? CurrentPage
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = null;
+    [Reactive]
+    public partial ViewModelBase? CurrentPage { get; set; }
+
+    public SidebarViewModel Sidebar { get; } = new();
+
+    public bool IsLoggedIn => grpcService.JwtToken != null;
 }
