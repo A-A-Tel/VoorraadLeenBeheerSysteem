@@ -1,0 +1,263 @@
+@startuml
+!pragma layout elk
+
+package Backend {
+
+    package App {
+
+        package Global {
+
+        }
+
+        package Interceptors {
+
+        }
+
+        package Logic {
+
+            package AuthLogic {
+
+            }
+
+            package ProductLogic {
+
+            }
+
+            package UserLogic {
+
+            }
+
+        }
+
+    }
+
+    package Database {
+
+        package Entities {
+
+            package Junctions {
+
+                class LoanProduct {
+                    + LoanId: ulong
+                    + ProductId: ulong
+                    + Amount: int
+                    + CreatedAt: DateTime
+                    + UpdatedAt: DateTime
+
+                    ' Navigation properties
+                    + Loan: Loan
+                    + Product: Product
+                }
+
+                class ProductNote {
+                    + ProductId: ulong
+                    + NoteId: ulong
+                    + CreatedAt: DateTime
+
+                    ' Navigation properties
+                    + Product: Product
+                    + Note: Note
+                }
+
+                class UserNote {
+                    + UserId: ulong
+                    + NoteId: ulong
+                    + CreatedAt: DateTime
+
+                    ' Navigation properties
+                    + User: User
+                    + Note: Note
+                }
+            }
+
+            interface IEntity {
+                + Id: ulong
+                + CreatedAt: DateTime
+                + UpdatedAt: DateTime
+            }
+            IEntity <|.up. Loan
+            IEntity <|.up. Note
+            IEntity <|.up. Product
+            IEntity <|.up. User
+
+            interface ISoftDeletable {
+                + IsDeleted: bool
+                + DeletedAt: DateTime?
+            }
+            ISoftDeletable <|.up. Loan
+            ISoftDeletable <|.up. Note
+            ISoftDeletable <|.up. Product
+            ISoftDeletable <|.up. User
+
+            class AuditLog {
+                + Id: ulong
+                + EventType: string
+                + UserName: string?
+                + CreatedDate: DateTime
+                + AuditData: JsonDocument
+            }
+
+            class Loan {
+                + LenderId: ulong?
+                + BorrowerId: ulong?
+                + DueAt: DateOnly
+                + ReturnedAt: DateTime?
+
+                ' Navigation properties
+                + Lender: User?
+                + Borrower: User?
+                + LoanProducts: ICollection<LoanProduct>
+            }
+            Loan "1" <-- "*" LoanProduct : Loan / LoanProducts
+
+            class Note {
+                + WriterId: ulong?
+                + Content: string
+
+                ' Navigation properties
+                + Writer: User?
+                + UserNotes: ICollection<UserNote>
+                + ProductNotes: ICollection<ProductNote>
+            }
+            Note "1" <-- "*" ProductNote : Note / ProductNotes
+            Note "1" <-- "*" UserNote : Note / UserNotes
+
+            class Product {
+                + TitleId: TitleType
+                + Name: string
+                + Description: string
+                + Amount: int
+                + ImageId: string?
+
+                ' Navigation properties
+                + Title: Title
+                + LoanProducts: ICollection<LoanProduct>
+                + ProductNotes: ICollection<ProductNote>
+            }
+            Product "1" <-- "*" LoanProduct : Product / LoanProducts
+            Product "1" <-- "*" ProductNote : Product / ProductNotes
+
+            class Role {
+                + Id: RoleType
+
+                ' Navigation properties
+                + Users: ICollection<User>
+            }
+            Role "1" <-- "*" User : Role
+
+            class Title {
+                + Id: TitleType
+
+                ' Navigation properties
+                + Users: ICollection<User>
+                + Products: ICollection<Product>
+            }
+            Title "1" <-- "*" User : Title
+            Title "1" <-- "*" Product : Title
+
+            class User {
+                + RoleId: RoleType
+                + TitleId: TitleType
+                + CardBytes: byte[]?
+                + Name: string
+                + Email: string
+                + Number: string
+                + PasswordHash: string?
+
+                ' Navigation properties
+                + Role: Role
+                + Title: Title
+                + Notes: ICollection<Note>
+                + LentLoans: ICollection<Loan>
+                + BorrowedLoans: ICollection<Loan>
+                + UserNotes: ICollection<UserNote>
+                + RefreshTokens: ICollection<UserRefreshToken>
+            }
+            User "1" <-- "*" UserRefreshToken : User / RefreshTokens
+            User "0..1" <-- "*" Note : Writer / Notes
+            User "0..1" <-- "*" Loan : Lender / LentLoans
+            User "0..1" <-- "*" Loan : Borrower / BorrowedLoans
+            User "1" <-- "*" UserNote : User / UserNotes
+
+            class UserRefreshToken {
+                + UserId: ulong
+                + Token: string
+                + CreatedByIp: string?
+                + ReplacedByToken: string?
+                + IsRevoked: bool
+
+                ' Navigation properties
+                + User: User
+
+                ' Computed helper properties
+                + IsExpired: bool
+                + IsActive: bool
+            }
+
+        }
+
+        class AppDbContext {
+            # CurrentDatetimeSyntax: string <<virtual>>
+            # AuditLogDataColumnType: string <<virtual>>
+            # UserCardBytesColumnType: string <<virtual>>
+
+            ' Plain data tables
+            + Users: DbSet<User>
+            + Roles: DbSet<Role>
+            + Titles: DbSet<Title>
+            + Products: DbSet<Product>
+            + Notes: DbSet<Note>
+            + Loans: DbSet<Loan>
+            + UserRefreshTokens: DbSet<UserRefreshToken>
+
+            ' Junctions
+            + LoanProducts: DbSet<LoanProduct>
+            + ProductNotes: DbSet<ProductNote>
+            + UserNotes: DbSet<UserNote>
+
+            ' Third party requirements
+            + AuditLogs: DbSet<AuditLog>
+
+            # OnModelCreating(builder: ModelBuilder): void <<override>>
+            # OnConfiguring(options: DbContextOptionsBuilder): void <<override>>
+            # UpdatedAtColumn<TProperty>(builder: PropertyBuilder<TProperty>): void
+
+            ' Helpers
+            - GetEnv(key: string): string {static}
+            - GetEnvIntUnsigned(key: string): uint {static}
+            - ConvertFilterExpression(type: Type): LambdaExpression {static}
+        }
+        AppDbContext .down.> User : <<use>>
+        AppDbContext .down.> Role : <<use>>
+        AppDbContext .down.> Title : <<use>>
+        AppDbContext .down.> Product : <<use>>
+        AppDbContext .down.> Note : <<use>>
+        AppDbContext .down.> Loan : <<use>>
+        AppDbContext .down.> UserRefreshToken : <<use>>
+        AppDbContext .down.> LoanProduct : <<use>>
+        AppDbContext .down.> ProductNote : <<use>>
+        AppDbContext .down.> UserNote : <<use>>
+        AppDbContext .down.> AuditLog : <<use>>
+
+        class DevelopmentDbContext {
+            # CurrentDatetimeSyntax: string <<override>>
+            # AuditLogDataColumnType: string <<override>>
+            # UserCardBytesColumnType: string <<override>>
+
+            # OnModelCreating(builder: ModelBuilder): void <<override>>
+            # OnConfiguring(options: DbContextOptionsBuilder): void <<override>>
+            # UpdatedAtColumn<TProperty>(builder: PropertyBuilder<TProperty>): void <<override>>
+        }
+        DevelopmentDbContext -down-|> AppDbContext
+    }
+
+    package Extensions {
+
+    }
+
+    class Program {
+        + Main(args: string)
+    }
+}
+
+@enduml
