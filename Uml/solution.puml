@@ -1,0 +1,9 @@
+@startuml
+!pragma layout elk
+
+!include ../Protos/Uml/protos.puml
+!include ../Backend/Uml/backend.puml
+
+Protos -[hidden]down- Backend
+
+@enduml
