@@ -2,13 +2,12 @@ syntax = "proto3";
 package storage.user;
 option csharp_namespace = "Protos.User";
 
-import "role.proto";
 import "dto.proto";
 
 message UserDto {
   uint64 id = 1;
-  role.RoleType role = 2;
-  role.TitleType title = 3;
+  dto.RoleType role = 2;
+  dto.TitleType title = 3;
   optional bytes card_bytes = 4;
   string name = 5;
   string email = 6;
@@ -38,11 +37,13 @@ service UserController {
 }
 
 message UserListRequest {
-  optional UserSearch search = 1;
+  optional int32 page = 1;
+  optional UserSearch search = 2;
 }
 
 message UserListResponse {
   repeated UserDto users = 1;
+  dto.PageData page_data = 2;
 }
 
 message UserGetRequest {
@@ -57,9 +58,10 @@ message UserCreateRequest {
   optional bytes card_bytes = 1;
   string name = 2;
   string email = 3;
-  uint32 number = 4;
-  uint64 RoleId = 5;
-  bool generate_password = 6;
+  string number = 4;
+  dto.RoleType role = 5;
+  dto.TitleType title = 6;
+  bool generate_password = 7;
 }
 
 message UserCreateResponse {
@@ -72,9 +74,10 @@ message UserUpdateRequest {
   optional bytes card_bytes = 2;
   optional string name = 3;
   optional string email = 4;
-  optional uint32 number = 5;
-  optional uint64 RoleId = 6;
-  bool generate_password = 7;
+  optional string number = 5;
+  optional dto.RoleType role = 6;
+  optional dto.TitleType title = 7;
+  bool generate_password = 8;
 }
 
 message UserUpdateResponse {

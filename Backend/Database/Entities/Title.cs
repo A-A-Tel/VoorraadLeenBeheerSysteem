@@ -1,4 +1,4 @@
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.Database.Entities;
 

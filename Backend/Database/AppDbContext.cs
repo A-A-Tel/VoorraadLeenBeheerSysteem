@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MySqlConnector;
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.Database;
 

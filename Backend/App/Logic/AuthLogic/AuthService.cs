@@ -6,7 +6,7 @@ using Backend.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Protos.Auth;
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.App.Logic.AuthLogic;
 

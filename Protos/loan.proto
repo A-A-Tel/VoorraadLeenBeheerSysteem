@@ -1,0 +1,102 @@
+syntax = "proto3";
+package storage.product;
+option csharp_namespace = "Protos.Loan";
+
+import "dto.proto";
+import "user.proto";
+import "product.proto";
+import "google/protobuf/timestamp.proto";
+
+message LoanDto {
+  uint64 id = 1;
+  user.UserDto lender = 2;
+  user.UserDto borrower = 3;
+  dto.LocalDate due_at = 4;
+  optional google.protobuf.Timestamp returned_at = 5;
+  repeated LoanProductDto loan_products = 6;
+}
+
+message LoanProductDto {
+  product.ProductDto product = 1;
+  int32 amount = 2;
+}
+
+message LoanProductIdDto {
+  uint64 product_id = 1;
+  int32 amount = 2;
+}
+
+enum LoanSortBy {
+  lender = 0;
+  borrower = 1;
+  due = 2;
+}
+
+message LoanSearch {
+  optional int32 page = 1;
+  optional dto.SortOrder sort_order = 2;
+  optional LoanSortBy sort_by = 3;
+}
+
+service LoanController {
+  rpc List (LoanListRequest) returns (LoanListResponse);
+  rpc Get (LoanGetRequest) returns (LoanGetResponse);
+  rpc Create (LoanCreateRequest) returns (LoanCreateResponse);
+  rpc Update (LoanUpdateRequest) returns (LoanUpdateResponse);
+  rpc Delete (LoanDeleteRequest) returns (LoanDeleteResponse);
+  rpc TurnIn (LoanTurnInRequest) returns (LoanTurnInResponse);
+}
+
+message LoanListRequest {
+  optional int32 page = 1;
+  optional LoanSearch search = 2;
+}
+
+message LoanListResponse {
+  repeated LoanDto loans = 1;
+  dto.PageData page_data = 2;
+}
+
+message LoanGetRequest {
+  uint64 id = 1;
+}
+
+message LoanGetResponse {
+  LoanDto loan = 1;
+}
+
+message LoanCreateRequest {
+  uint64 lender_id = 1;
+  uint64 borrower_id = 2;
+  dto.LocalDate due_at = 3;
+  repeated LoanProductIdDto loan_products = 4;
+}
+
+message LoanCreateResponse {
+  LoanDto loan = 1;
+}
+
+message LoanUpdateRequest {
+  uint64 id = 1;
+  dto.LocalDate due_at = 2;
+}
+
+message LoanUpdateResponse {
+  LoanDto loan = 1;
+}
+
+message LoanDeleteRequest {
+  uint64 id = 1;
+}
+
+message LoanDeleteResponse {
+
+}
+
+message LoanTurnInRequest {
+  repeated LoanProductIdDto products = 1;
+}
+
+message LoanTurnInResponse {
+  LoanDto loan = 1;
+}

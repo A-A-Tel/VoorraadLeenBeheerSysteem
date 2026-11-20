@@ -2,12 +2,31 @@ syntax = "proto3";
 package storage.dto;
 option csharp_namespace = "Protos.Dto";
 
-message Timestamp {
-  int64 seconds = 1;
-  int32 nanos = 2;
+// File for generic DTOs
+
+message LocalDate {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+
+message PageData {
+  int32 current_page = 1;
+  int32 max_page = 2;
 }
 
 enum SortOrder {
   ascending = 0;
   descending = 1;
+}
+
+enum RoleType {
+  borrower = 0;
+  lender = 1;
+  manager = 2;
+}
+
+enum TitleType {
+  student = 0;
+  teacher = 1;
 }

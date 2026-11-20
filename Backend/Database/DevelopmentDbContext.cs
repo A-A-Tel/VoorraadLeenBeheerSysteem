@@ -2,7 +2,7 @@ using Backend.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.Database;
 

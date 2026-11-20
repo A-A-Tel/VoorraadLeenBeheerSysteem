@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
 using Microsoft.EntityFrameworkCore;
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.Database.Entities;
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Database.Entities.Junctions;
-using Protos.Role;
+using Protos.Dto;
 
 namespace Backend.Database.Entities;
 

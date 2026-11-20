@@ -1,243 +1,430 @@
-@startuml
-
+@startuml storage-protos
 !pragma layout elk
 
-package Protos {
-
-  package Auth {
-    class ManagerLoginRequest {
-      +Email : string
-      +Password : string
-    }
-
-    class LenderLoginRequest {
-      +CardBytes : ByteString
-      +Password : string
-    }
-
-    class LoginResponse {
-      +Jwt : string
-    }
-
-    class LenderLookupRequest {
-      +CardBytes : ByteString
-    }
-
-    class LenderLookupResponse {
-      +Name : string
-    }
+' ============================================================
+' dto.proto  (Protos.Dto)
+' ============================================================
+package "Protos.Dto" {
+  class LocalDate <<sealed>> {
+    +Year : int
+    +Month : int
+    +Day : int
   }
 
-  package Dto {
-    class Timestamp {
-      +Seconds : long
-      +Nanos : int
-    }
-
-    enum SortOrder {
-      Ascending
-      Descending
-    }
+  class PageData <<sealed>> {
+    +CurrentPage : int
+    +MaxPage : int
   }
 
-  package Role {
-    enum RoleType {
-      Borrower
-      Lender
-      Manager
-    }
-
-    enum TitleType {
-      Student
-      Teacher
-    }
+  enum SortOrder {
+    Ascending = 0
+    Descending = 1
   }
 
-  package Product {
-    class ProductDto {
-      +Id : ulong
-      +Title : TitleType
-      +Name : string
-      +Description : string
-      +Amount : int
-      +ImageId : string?
-    }
-
-    class ImageDto {
-      +Id : string
-      +Bytes : ByteString
-    }
-
-    enum RoleSortBy {
-      Name
-      Description
-      Amount
-    }
-
-    class ProductSearch {
-      +Name : string?
-      +Description : string?
-      +SortOrder : SortOrder?
-      +SortBy : RoleSortBy?
-    }
-
-    class ProductListRequest
-    class ProductListResponse
-    class ProductGetRequest {
-      +Id : ulong
-    }
-    class ProductGetResponse
-
-    class ProductCreateRequest {
-      +Name : string
-      +Description : string
-      +Amount : int
-    }
-    class ProductCreateResponse
-
-    class ProductUpdateRequest {
-      +Id : ulong
-      +Name : string?
-      +Description : string?
-      +Amount : int?
-    }
-    class ProductUpdateResponse
-
-    class ProductDeleteRequest {
-      +Id : ulong
-    }
-    class ProductDeleteResponse
-
-    class ProductImageGetRequest {
-      +ImageId : string
-    }
-    class ProductImageGetResponse
-
-    class ProductImageCreateRequest {
-      +Bytes : ByteString
-    }
-    class ProductImageCreateResponse {
-      +ImageId : string
-    }
-
-    class ProductImageUpdateRequest {
-      +ImageId : string
-      +Bytes : ByteString
-    }
-    class ProductImageUpdateResponse {
-      +ImageId : string
-    }
-
-    class ProductImageDeleteRequest {
-      +ImageId : string
-    }
-    class ProductImageDeleteResponse
+  enum RoleType {
+    Borrower = 0
+    Lender = 1
+    Manager = 2
   }
 
-  package User {
-    class UserDto {
-      +Id : ulong
-      +Role : RoleType
-      +Title : TitleType
-      +CardBytes : ByteString?
-      +Name : string
-      +Email : string
-      +Number : string
-    }
-
-    enum UserSortBy {
-      Name
-      Email
-      Number
-    }
-
-    class UserSearch {
-      +Name : string?
-      +Email : string?
-      +Number : string?
-      +SortOrder : SortOrder?
-      +SortBy : UserSortBy?
-    }
-
-    class UserListRequest
-    class UserListResponse
-    class UserGetRequest {
-      +Id : ulong
-    }
-    class UserGetResponse
-
-    class UserCreateRequest {
-      +CardBytes : ByteString?
-      +Name : string
-      +Email : string
-      +Number : uint
-      +RoleId : ulong
-      +GeneratePassword : bool
-    }
-    class UserCreateResponse {
-      +GeneratedPassword : string?
-    }
-
-    class UserUpdateRequest {
-      +Id : ulong
-      +CardBytes : ByteString?
-      +Name : string?
-      +Email : string?
-      +Number : uint?
-      +RoleId : ulong?
-      +GeneratePassword : bool
-    }
-    class UserUpdateResponse {
-      +GeneratedPassword : string?
-    }
-
-    class UserDeleteRequest {
-      +Id : ulong
-    }
-    class UserDeleteResponse
+  enum TitleType {
+    Student = 0
+    Teacher = 1
   }
-
 }
 
-' ---------- Product relations ----------
-Protos.Product.ProductDto -up-> Protos.Role.TitleType : Title
-Protos.Product.ProductSearch -up-> Protos.Dto.SortOrder : SortOrder
-Protos.Product.ProductSearch --> Protos.Product.RoleSortBy : SortBy
+' ============================================================
+' user.proto  (Protos.User)
+' ============================================================
+package "Protos.User" {
+  class UserDto <<sealed>> {
+    +Id : ulong
+    +Role : RoleType
+    +Title : TitleType
+    +CardBytes : ByteString
+    +Name : string
+    +Email : string
+    +Number : string
+  }
 
-Protos.Product.ProductListRequest --> "0..1" Protos.Product.ProductSearch : Search
-Protos.Product.ProductListResponse *-- "0..*" Protos.Product.ProductDto : Products
-Protos.Product.ProductGetResponse --> "1" Protos.Product.ProductDto : Product
-Protos.Product.ProductCreateResponse --> "1" Protos.Product.ProductDto : Product
-Protos.Product.ProductUpdateResponse --> "1" Protos.Product.ProductDto : Product
-Protos.Product.ProductImageGetResponse --> "1" Protos.Product.ImageDto : Image
+  enum UserSortBy {
+    Name = 0
+    Email = 1
+    Number = 2
+  }
 
-' ---------- User relations ----------
-Protos.User.UserDto -up-> Protos.Role.RoleType : Role
-Protos.User.UserDto -up-> Protos.Role.TitleType : Title
-Protos.User.UserSearch -up-> Protos.Dto.SortOrder : SortOrder
-Protos.User.UserSearch --> Protos.User.UserSortBy : SortBy
+  class UserSearch <<sealed>> {
+    +Name : string
+    +Email : string
+    +Number : string
+    +SortOrder : SortOrder
+    +SortBy : UserSortBy
+  }
 
-Protos.User.UserListRequest --> "0..1" Protos.User.UserSearch : Search
-Protos.User.UserListResponse *-- "0..*" Protos.User.UserDto : Users
-Protos.User.UserGetResponse --> "1" Protos.User.UserDto : User
-Protos.User.UserCreateResponse --> "1" Protos.User.UserDto : User
-Protos.User.UserUpdateResponse --> "1" Protos.User.UserDto : User
+  class UserListRequest <<sealed>> {
+    +Page : int
+    +Search : UserSearch
+  }
 
-' ---------- Layout: request above its response ----------
-Protos.Product.ProductListRequest -[hidden]down-> Protos.Product.ProductListResponse
-Protos.Product.ProductGetRequest -[hidden]down-> Protos.Product.ProductGetResponse
-Protos.Product.ProductCreateRequest -[hidden]down-> Protos.Product.ProductCreateResponse
-Protos.Product.ProductUpdateRequest -[hidden]down-> Protos.Product.ProductUpdateResponse
-Protos.Product.ProductDeleteRequest -[hidden]down-> Protos.Product.ProductDeleteResponse
-Protos.Product.ProductImageGetRequest -[hidden]down-> Protos.Product.ProductImageGetResponse
-Protos.Product.ProductImageCreateRequest -[hidden]down-> Protos.Product.ProductImageCreateResponse
-Protos.Product.ProductImageUpdateRequest -[hidden]down-> Protos.Product.ProductImageUpdateResponse
-Protos.Product.ProductImageDeleteRequest -[hidden]down-> Protos.Product.ProductImageDeleteResponse
+  class UserListResponse <<sealed>> {
+    +Users : RepeatedField<UserDto>
+    +PageData : PageData
+  }
 
-Protos.User.UserListRequest -[hidden]down-> Protos.User.UserListResponse
-Protos.User.UserGetRequest -[hidden]down-> Protos.User.UserGetResponse
-Protos.User.UserCreateRequest -[hidden]down-> Protos.User.UserCreateResponse
-Protos.User.UserUpdateRequest -[hidden]down-> Protos.User.UserUpdateResponse
-Protos.User.UserDeleteRequest -[hidden]down-> Protos.User.UserDeleteResponse
+  class UserGetRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class UserGetResponse <<sealed>> {
+    +User : UserDto
+  }
+
+  class UserCreateRequest <<sealed>> {
+    +CardBytes : ByteString
+    +Name : string
+    +Email : string
+    +Number : string
+    +Role : RoleType
+    +Title : TitleType
+    +GeneratePassword : bool
+  }
+
+  class UserCreateResponse <<sealed>> {
+    +User : UserDto
+    +GeneratedPassword : string
+  }
+
+  class UserUpdateRequest <<sealed>> {
+    +Id : ulong
+    +CardBytes : ByteString
+    +Name : string
+    +Email : string
+    +Number : string
+    +Role : RoleType
+    +Title : TitleType
+    +GeneratePassword : bool
+  }
+
+  class UserUpdateResponse <<sealed>> {
+    +User : UserDto
+    +GeneratedPassword : string
+  }
+
+  class UserDeleteRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class UserDeleteResponse <<sealed>>
+}
+
+' ============================================================
+' product.proto  (Protos.Product)
+' ============================================================
+package "Protos.Product" {
+  class ProductDto <<sealed>> {
+    +Id : ulong
+    +Title : TitleType
+    +Name : string
+    +Description : string
+    +Amount : int
+    +ImageId : string
+  }
+
+  class ImageDto <<sealed>> {
+    +Id : string
+    +Bytes : ByteString
+  }
+
+  enum ProductSortBy {
+    Name = 0
+    Description = 1
+    Amount = 2
+  }
+
+  class ProductSearch <<sealed>> {
+    +Name : string
+    +Description : string
+    +SortOrder : SortOrder
+    +SortBy : ProductSortBy
+  }
+
+  class ProductListRequest <<sealed>> {
+    +Page : int
+    +Search : ProductSearch
+  }
+
+  class ProductListResponse <<sealed>> {
+    +Products : RepeatedField<ProductDto>
+  }
+
+  class ProductGetRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class ProductGetResponse <<sealed>> {
+    +Product : ProductDto
+  }
+
+  class ProductCreateRequest <<sealed>> {
+    +Name : string
+    +Description : string
+    +Amount : int
+    +Title : TitleType
+  }
+
+  class ProductCreateResponse <<sealed>> {
+    +Product : ProductDto
+  }
+
+  class ProductUpdateRequest <<sealed>> {
+    +Id : ulong
+    +Name : string
+    +Description : string
+    +Amount : int
+    +Title : TitleType
+  }
+
+  class ProductUpdateResponse <<sealed>> {
+    +Product : ProductDto
+  }
+
+  class ProductDeleteRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class ProductDeleteResponse <<sealed>>
+
+  class ProductImageGetRequest <<sealed>> {
+    +ImageId : string
+  }
+
+  class ProductImageGetResponse <<sealed>> {
+    +Image : ImageDto
+  }
+
+  class ProductImageCreateRequest <<sealed>> {
+    +Bytes : ByteString
+  }
+
+  class ProductImageCreateResponse <<sealed>> {
+    +ImageId : string
+  }
+
+  class ProductImageUpdateRequest <<sealed>> {
+    +ImageId : string
+    +Bytes : ByteString
+  }
+
+  class ProductImageUpdateResponse <<sealed>> {
+    +ImageId : string
+  }
+
+  class ProductImageDeleteRequest <<sealed>> {
+    +ImageId : string
+  }
+
+  class ProductImageDeleteResponse <<sealed>>
+}
+
+' ============================================================
+' loan.proto  (Protos.Loan)
+' ============================================================
+package "Protos.Loan" {
+  class LoanDto <<sealed>> {
+    +Id : ulong
+    +Lender : UserDto
+    +Borrower : UserDto
+    +DueAt : LocalDate
+    +ReturnedAt : Timestamp
+    +LoanProducts : RepeatedField<LoanProductDto>
+  }
+
+  class LoanProductDto <<sealed>> {
+    +Product : ProductDto
+    +Amount : int
+  }
+
+  class LoanProductIdDto <<sealed>> {
+    +ProductId : ulong
+    +Amount : int
+  }
+
+  enum LoanSortBy {
+    Lender = 0
+    Borrower = 1
+    Due = 2
+  }
+
+  class LoanSearch <<sealed>> {
+    +Page : int
+    +SortOrder : SortOrder
+    +SortBy : LoanSortBy
+  }
+
+  class LoanListRequest <<sealed>> {
+    +Page : int
+    +Search : LoanSearch
+  }
+
+  class LoanListResponse <<sealed>> {
+    +Loans : RepeatedField<LoanDto>
+    +PageData : PageData
+  }
+
+  class LoanGetRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class LoanGetResponse <<sealed>> {
+    +Loan : LoanDto
+  }
+
+  class LoanCreateRequest <<sealed>> {
+    +LenderId : ulong
+    +BorrowerId : ulong
+    +DueAt : LocalDate
+    +LoanProducts : RepeatedField<LoanProductIdDto>
+  }
+
+  class LoanCreateResponse <<sealed>> {
+    +Loan : LoanDto
+  }
+
+  class LoanUpdateRequest <<sealed>> {
+    +Id : ulong
+    +DueAt : LocalDate
+  }
+
+  class LoanUpdateResponse <<sealed>> {
+    +Loan : LoanDto
+  }
+
+  class LoanDeleteRequest <<sealed>> {
+    +Id : ulong
+  }
+
+  class LoanDeleteResponse <<sealed>>
+
+  class LoanTurnInRequest <<sealed>> {
+    +Products : RepeatedField<LoanProductIdDto>
+  }
+
+  class LoanTurnInResponse <<sealed>> {
+    +Loan : LoanDto
+  }
+}
+
+' ============================================================
+' auth.proto  (Protos.Auth)
+' ============================================================
+package "Protos.Auth" {
+  class ManagerLoginRequest <<sealed>> {
+    +Email : string
+    +Password : string
+  }
+
+  class LenderLoginRequest <<sealed>> {
+    +CardBytes : ByteString
+    +Password : string
+  }
+
+  class LoginResponse <<sealed>> {
+    +Jwt : string
+  }
+
+  class LenderLookupRequest <<sealed>> {
+    +CardBytes : ByteString
+  }
+
+  class LenderLookupResponse <<sealed>> {
+    +Name : string
+  }
+}
+
+' ============================================================
+' Layout: every Request sits above its matching Response
+' ============================================================
+UserListRequest -[hidden]down-> UserListResponse
+UserGetRequest -[hidden]down-> UserGetResponse
+UserCreateRequest -[hidden]down-> UserCreateResponse
+UserUpdateRequest -[hidden]down-> UserUpdateResponse
+UserDeleteRequest -[hidden]down-> UserDeleteResponse
+
+ProductListRequest -[hidden]down-> ProductListResponse
+ProductGetRequest -[hidden]down-> ProductGetResponse
+ProductCreateRequest -[hidden]down-> ProductCreateResponse
+ProductUpdateRequest -[hidden]down-> ProductUpdateResponse
+ProductDeleteRequest -[hidden]down-> ProductDeleteResponse
+ProductImageGetRequest -[hidden]down-> ProductImageGetResponse
+ProductImageCreateRequest -[hidden]down-> ProductImageCreateResponse
+ProductImageUpdateRequest -[hidden]down-> ProductImageUpdateResponse
+ProductImageDeleteRequest -[hidden]down-> ProductImageDeleteResponse
+
+LoanListRequest -[hidden]down-> LoanListResponse
+LoanGetRequest -[hidden]down-> LoanGetResponse
+LoanCreateRequest -[hidden]down-> LoanCreateResponse
+LoanUpdateRequest -[hidden]down-> LoanUpdateResponse
+LoanDeleteRequest -[hidden]down-> LoanDeleteResponse
+LoanTurnInRequest -[hidden]down-> LoanTurnInResponse
+
+ManagerLoginRequest -[hidden]down-> LoginResponse
+LenderLoginRequest -[hidden]down-> LoginResponse
+LenderLookupRequest -[hidden]down-> LenderLookupResponse
+
+' ============================================================
+' Relationships between messages / enums
+' ============================================================
+
+' --- user ---
+UserDto --> RoleType : Role
+UserDto --> TitleType : Title
+UserSearch --> SortOrder
+UserSearch --> UserSortBy
+UserListRequest --> UserSearch
+UserListResponse "1" *-- "0..*" UserDto
+UserListResponse --> PageData
+UserGetResponse --> UserDto
+UserCreateRequest --> RoleType : Role
+UserCreateRequest --> TitleType : Title
+UserCreateResponse --> UserDto
+UserUpdateRequest --> RoleType : Role
+UserUpdateRequest --> TitleType : Title
+UserUpdateResponse --> UserDto
+
+' --- product ---
+ProductDto --> TitleType : Title
+ProductSearch --> SortOrder
+ProductSearch --> ProductSortBy
+ProductListRequest --> ProductSearch
+ProductListResponse "1" *-- "0..*" ProductDto
+ProductGetResponse --> ProductDto
+ProductCreateRequest --> TitleType : Title
+ProductCreateResponse --> ProductDto
+ProductUpdateRequest --> TitleType : Title
+ProductUpdateResponse --> ProductDto
+ProductImageGetResponse --> ImageDto
+ProductDto ..> ImageDto : ImageId (by id)
+
+' --- loan ---
+LoanDto --> UserDto : Lender
+LoanDto --> UserDto : Borrower
+LoanDto --> LocalDate : DueAt
+LoanDto "1" *-- "0..*" LoanProductDto : LoanProducts
+LoanProductDto --> ProductDto
+LoanSearch --> SortOrder
+LoanSearch --> LoanSortBy
+LoanListRequest --> LoanSearch
+LoanListResponse "1" *-- "0..*" LoanDto
+LoanListResponse --> PageData
+LoanGetResponse --> LoanDto
+LoanCreateRequest --> LocalDate : DueAt
+LoanCreateRequest "1" *-- "0..*" LoanProductIdDto
+LoanCreateResponse --> LoanDto
+LoanUpdateRequest --> LocalDate : DueAt
+LoanUpdateResponse --> LoanDto
+LoanTurnInRequest "1" *-- "0..*" LoanProductIdDto
+LoanTurnInResponse --> LoanDto
+LoanProductIdDto ..> ProductDto : ProductId (by id)
+
 
 @enduml
