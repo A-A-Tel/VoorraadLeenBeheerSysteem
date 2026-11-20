@@ -13,7 +13,7 @@
 
     <ItemGroup>
 
-        <Protobuf Include="..\Protos\**\*"
+        <Protobuf Include="..\Protos\**\*.proto"
                   Link="Protos\%(RecursiveDir)%(Filename)%(Extension)"
                   GrpcServices="Client"
         />
